@@ -18,18 +18,20 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 900px;
+  max-width: 1000px; /* ← 少し広げて右の項目が詰まらないように */
   margin: auto;
-  padding: 0 1rem;
+  padding: 0 1.2rem; /* ← 左右余白を少し増やす */
 }
 
 .logo {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  white-space: nowrap;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
+  flex-wrap: wrap; /* ← 小さい画面でも折り返し可能に */
   gap: 1rem;
   margin: 0;
   padding: 0;
@@ -89,24 +91,9 @@ body {
   border-top: 1px solid #e5e7eb;
   padding-top: 0.5rem;
   color: #374151;
-  transition: all 0.3s ease;
 }
 
-.button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background: #2563eb;
-  color: #fff;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: 0.2s;
-}
-
-.button:hover {
-  background: #1e40af;
-}
-
-/* ===== ボタン ===== */
+/* ===== 詳細開閉ボタン ===== */
 .toggle-btn {
   margin-top: 0.8rem;
   border: none;
