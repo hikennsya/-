@@ -55,8 +55,10 @@ body {
   transition: opacity 0.2s ease;
 }
 
-.nav a:hover {
+.nav a:hover,
+.nav a.active {
   opacity: 0.8;
+  text-decoration: underline;
 }
 
 /* ==============================
@@ -87,10 +89,19 @@ body {
   font-size: 1.3rem;
 }
 
-.post p {
+.post p.body {
   margin: 0 0 0.8rem 0;
   color: #4b5563;
   font-size: 0.95rem;
+}
+
+.post p.extra {
+  margin: 0 0 1rem 0;
+  color: #1f2937;
+  background: #f3f4f6;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
 }
 
 /* ==============================
@@ -159,38 +170,8 @@ body {
   .nav ul.show {
     display: flex;
   }
-}
-/* ==============================
-   ポリシーページ用
-============================== */
-.policy-content {
-  margin-top: 2rem;
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
 
-.policy-content h2 {
-  color: #1e3a8a;
-  margin-bottom: 1rem;
-}
-
-.policy-content h3 {
-  color: #1f2937;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  border-left: 4px solid #2563eb;
-  padding-left: 0.5rem;
-}
-
-.policy-content p,
-.policy-content ul {
-  color: #374151;
-  margin-bottom: 1rem;
-  line-height: 1.7;
-}
-
-.policy-content ul {
-  padding-left: 1.5rem;
+  .container {
+    margin-top: 120px;
+  }
 }
