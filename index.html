@@ -56,10 +56,9 @@
           const cols = row.split(',');
           if (cols.length < 3) return; // 3列以上を想定
 
-          const title = cols[0].trim();  // タイトル（短文）
-          const shortDesc = cols[1].trim(); // 短い説明（最初に見せる）
-          const longDesc = cols[2].trim();  // 詳細（クリック後に表示）
-          const formUrl = cols[3] ? cols[3].trim() : ''; // 応募フォームURL（任意）
+          const title = cols[0].trim();   // タイトル
+          const shortDesc = cols[1].trim(); // 短文（最初に表示）
+          const longDesc = cols[2].trim();  // 長文（クリックで表示）
 
           const postDiv = document.createElement('div');
           postDiv.className = 'post card';
@@ -71,7 +70,6 @@
             <p class="post-short">${shortDesc}</p>
             <div class="post-detail" style="display:none;">
               <p>${longDesc}</p>
-              ${formUrl ? `<a class="button" href="${formUrl}" target="_blank">応募する</a>` : ''}
             </div>
             <button class="toggle-btn">▼ 詳細を表示</button>
           `;
