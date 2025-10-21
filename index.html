@@ -12,7 +12,7 @@
       <h1 class="site-title">実験募集掲示板</h1>
       <nav class="nav">
         <ul>
-          <li><a href="index.html">ホーム</a></li>
+          <li><a href="index.html" class="active">ホーム</a></li>
           <li><a href="policy.html">ポリシー</a></li>
           <li><a href="recruit.html">募集</a></li>
           <li><a href="contact.html">お問い合わせ</a></li>
@@ -20,7 +20,7 @@
       </nav>
     </header>
 
-    <!-- 投稿リスト表示エリア -->
+    <!-- 投稿リスト -->
     <section id="posts" class="post-list">
       <div id="loading" class="loading">投稿を読み込んでいます...</div>
       <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
@@ -32,7 +32,7 @@
   </div>
 
   <script>
-    // ✅ GoogleスプレッドシートのCSV公開URLをここに貼る
+    // ✅ GoogleスプレッドシートのCSV公開URL
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?output=csv';
 
     const postsContainer = document.getElementById('posts');
@@ -40,32 +40,33 @@
     const error = document.getElementById('error');
 
     fetch(sheetUrl)
-      .then(res => {
-        if (!res.ok) throw new Error('ネットワークエラー');
-        return res.text();
-      })
+      .then(res => res.text())
       .then(csvText => {
         loading.style.display = 'none';
-        const rows = csvText.split('\n').slice(1); // ヘッダーを除く
+
+        // ✅ 正確にCSVを解析（カンマ・改行対応）
+        const rows = [];
+        const lines = csvText.split('\n');
+        const regex = /(".*?"|[^",\n]+)(?=\s*,|\s*$)/g;
+        for (let i = 1; i < lines.length; i++) { // ヘッダーを除く
+          const cols = [...lines[i].matchAll(regex)].map(m => m[0].replace(/^"|"$/g, '').trim());
+          if (cols.length >= 4) rows.push(cols);
+        }
 
         if (rows.length === 0) {
           postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
           return;
         }
 
-        rows.forEach(row => {
-          const cols = row.split(',');
-          if (cols.length < 3) return;
-
-          const title = cols[0].trim();
-          const body = cols[1].trim();
-          const formUrl = cols[2].trim();
+        rows.forEach(cols => {
+          const [title, body, formUrl, extra] = cols;
 
           const postDiv = document.createElement('div');
           postDiv.className = 'post card';
           postDiv.innerHTML = `
             <h2>${title}</h2>
-            <p>${body}</p>
+            <p class="body">${body}</p>
+            <p class="extra"><strong>日程・場所：</strong>${extra}</p>
             <a class="button" href="${formUrl}" target="_blank">応募する</a>
           `;
           postsContainer.appendChild(postDiv);
@@ -79,4 +80,3 @@
   </script>
 </body>
 </html>
-
