@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <link rel="stylesheet" href="styles.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>実験募集掲示板</title>
@@ -13,13 +12,10 @@
       <h1>実験募集掲示板</h1>
     </header>
 
+    <!-- 投稿リスト表示エリア -->
     <section id="posts" class="post-list">
-    
-
-      <const title = cols[0];
-const body = cols[1];
-const formUrl = cols[2];
->
+      <div id="loading" class="loading">投稿を読み込んでいます...</div>
+      <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
     </section>
 
     <footer class="footer">
@@ -28,20 +24,34 @@ const formUrl = cols[2];
   </div>
 
   <script>
-    // GoogleスプレッドシートのCSV公開URLをここに貼ってください
+    // ✅ GoogleスプレッドシートのCSV公開URLをここに貼る
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?output=csv';
 
+    const postsContainer = document.getElementById('posts');
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+
     fetch(sheetUrl)
-      .then(res => res.text())
+      .then(res => {
+        if (!res.ok) throw new Error('ネットワークエラー');
+        return res.text();
+      })
       .then(csvText => {
+        loading.style.display = 'none';
         const rows = csvText.split('\n').slice(1); // ヘッダーを除く
-        const container = document.getElementById('posts');
+
+        if (rows.length === 0) {
+          postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
+          return;
+        }
+
         rows.forEach(row => {
           const cols = row.split(',');
           if (cols.length < 3) return;
-          const title = cols[0];
-          const body = cols[1];
-          const formUrl = cols[2];
+
+          const title = cols[0].trim();
+          const body = cols[1].trim();
+          const formUrl = cols[2].trim();
 
           const postDiv = document.createElement('div');
           postDiv.className = 'post card';
@@ -50,10 +60,14 @@ const formUrl = cols[2];
             <p>${body}</p>
             <a class="button" href="${formUrl}" target="_blank">応募する</a>
           `;
-          container.appendChild(postDiv);
+          postsContainer.appendChild(postDiv);
         });
       })
-      .catch(err => console.error('CSV読み込みエラー:', err));
+      .catch(err => {
+        console.error('CSV読み込みエラー:', err);
+        loading.style.display = 'none';
+        error.style.display = 'block';
+      });
   </script>
 </body>
 </html>
