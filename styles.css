@@ -1,72 +1,119 @@
-/* styles.css */
-
-body { font-family: sans-serif; background: #f0f4f8; margin:0; padding:0; }
-.container { max-width: 900px; margin: auto; padding: 2rem; }
-.site-title h1 { text-align: center; color: #1f2937; }
-.post-list { display: grid; gap: 1rem; margin-top: 1rem; }
-.post { background: #fff; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-.post h2 { margin:0 0 0.5rem 0; color: #111827; }
-.post p { margin:0 0 0.5rem 0; color: #4b5563; }
-.button { display:inline-block; padding:0.5rem 1rem; background:#2563eb; color:#fff; border-radius:6px; text-decoration:none; }
-.button:hover { background:#1e40af; }
-.footer { margin-top: 2rem; text-align: center; color: #6b7280; font-size: 0.9rem; }
+/* ==============================
+   ベース設定
+============================== */
 body {
   font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
-  background: #f7f8fa;
+  background: #f5f7fb;
+  color: #1f2937;
   margin: 0;
   padding: 0;
+  line-height: 1.6;
 }
 
 .container {
-  max-width: 900px;
-  margin: auto;
-  padding: 2rem;
+  max-width: 960px;
+  margin: 100px auto 2rem;
+  padding: 0 1.5rem;
 }
 
-.site-title h1 {
-  text-align: center;
-  color: #1f2937;
-  font-size: 2rem;
+/* ==============================
+   ヘッダー・ナビゲーション
+============================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  z-index: 1000;
 }
 
+.site-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.nav a:hover {
+  opacity: 0.8;
+}
+
+/* ==============================
+   投稿カード
+============================== */
 .post-list {
   display: grid;
-  gap: 1.2rem;
-  margin-top: 1rem;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .post {
   background: #fff;
-  padding: 1.2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .post h2 {
-  margin: 0 0 0.4rem 0;
+  margin: 0 0 0.5rem 0;
   color: #111827;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .post p {
   margin: 0 0 0.8rem 0;
   color: #4b5563;
+  font-size: 0.95rem;
 }
 
+/* ==============================
+   ボタン
+============================== */
 .button {
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   background: #2563eb;
   color: #fff;
   border-radius: 6px;
   text-decoration: none;
-  transition: 0.2s;
+  font-weight: 500;
+  transition: background 0.2s ease;
 }
 
 .button:hover {
   background: #1e40af;
 }
 
+/* ==============================
+   ローディング・エラー
+============================== */
 .loading {
   text-align: center;
   color: #6b7280;
@@ -82,9 +129,34 @@ body {
   margin: 1rem 0;
 }
 
+/* ==============================
+   フッター
+============================== */
 .footer {
-  margin-top: 2rem;
+  margin-top: 3rem;
   text-align: center;
   color: #6b7280;
   font-size: 0.9rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ==============================
+   スマホ対応
+============================== */
+@media (max-width: 640px) {
+  .nav ul {
+    flex-direction: column;
+    background: #1e40af;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 180px;
+    padding: 1rem;
+    display: none;
+  }
+
+  .nav ul.show {
+    display: flex;
+  }
 }
