@@ -1,177 +1,131 @@
-/* ==============================
-   ベース設定
-============================== */
 body {
   font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
-  background: #f5f7fb;
-  color: #1f2937;
+  background: #f7f8fa;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
+  color: #1f2937;
 }
 
-.container {
-  max-width: 960px;
-  margin: 100px auto 2rem;
-  padding: 0 1.5rem;
-}
-
-/* ==============================
-   ヘッダー・ナビゲーション
-============================== */
+/* ===== ナビバー ===== */
 .site-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
   background: #2563eb;
   color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 2rem;
-  z-index: 1000;
+  max-width: 900px;
+  margin: auto;
+  padding: 0 1rem;
 }
 
-.site-title {
-  margin: 0;
+.logo {
   font-size: 1.4rem;
-  font-weight: bold;
 }
 
-.nav ul {
+.nav-links {
   list-style: none;
+  display: flex;
+  gap: 1rem;
   margin: 0;
   padding: 0;
-  display: flex;
-  gap: 1.5rem;
 }
 
-.nav a {
-  color: #ffffff;
+.nav-links a {
+  color: #fff;
   text-decoration: none;
-  font-weight: 500;
-  transition: opacity 0.2s ease;
+  transition: 0.2s;
 }
 
-.nav a:hover,
-.nav a.active {
-  opacity: 0.8;
+.nav-links a:hover {
   text-decoration: underline;
 }
 
-/* ==============================
-   投稿カード
-============================== */
+/* ===== 投稿カード ===== */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+}
+
 .post-list {
   display: grid;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  gap: 1.2rem;
+  margin-top: 1rem;
 }
 
 .post {
   background: #fff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.post:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.post h2 {
-  margin: 0 0 0.5rem 0;
-  color: #111827;
-  font-size: 1.3rem;
-}
-
-.post p.body {
-  margin: 0 0 0.8rem 0;
-  color: #4b5563;
-  font-size: 0.95rem;
-}
-
-.post p.extra {
-  margin: 0 0 1rem 0;
-  color: #1f2937;
-  background: #f3f4f6;
-  padding: 0.6rem;
+.post-number {
+  background: #2563eb;
+  color: white;
   border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
 }
 
-/* ==============================
-   ボタン
-============================== */
+.post-short {
+  margin: 0.6rem 0;
+  color: #4b5563;
+}
+
+.post-detail {
+  margin-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.5rem;
+  color: #374151;
+  transition: all 0.3s ease;
+}
+
 .button {
   display: inline-block;
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem;
   background: #2563eb;
   color: #fff;
   border-radius: 6px;
   text-decoration: none;
-  font-weight: 500;
-  transition: background 0.2s ease;
+  transition: 0.2s;
 }
 
 .button:hover {
   background: #1e40af;
 }
 
-/* ==============================
-   ローディング・エラー
-============================== */
-.loading {
-  text-align: center;
-  color: #6b7280;
-  padding: 1rem;
-}
-
-.error {
-  text-align: center;
-  color: #b91c1c;
-  background: #fee2e2;
+/* ===== ボタン ===== */
+.toggle-btn {
+  margin-top: 0.8rem;
+  border: none;
+  background: #f3f4f6;
+  color: #2563eb;
   border-radius: 6px;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* ==============================
-   フッター
-============================== */
+.toggle-btn:hover {
+  background: #e0e7ff;
+}
+
+/* ===== フッター ===== */
 .footer {
-  margin-top: 3rem;
+  margin-top: 2rem;
   text-align: center;
   color: #6b7280;
   font-size: 0.9rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid #e5e7eb;
-}
-
-/* ==============================
-   スマホ対応
-============================== */
-@media (max-width: 640px) {
-  .nav ul {
-    flex-direction: column;
-    background: #1e40af;
-    position: absolute;
-    top: 60px;
-    right: 0;
-    width: 180px;
-    padding: 1rem;
-    display: none;
-  }
-
-  .nav ul.show {
-    display: flex;
-  }
-
-  .container {
-    margin-top: 120px;
-  }
 }
