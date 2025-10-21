@@ -13,12 +13,17 @@
     </header>
 
     <section id="posts" class="post-list">
-      <!-- 投稿はここに JS が挿入します -->
+      <!-- 投稿はここに JS が挿入されます -->
     </section>
+
+    <footer class="footer">
+      © あなたの研究室名
+    </footer>
   </div>
 
   <script>
-    const sheetUrl = 'スプレッドシートの公開URLをここに貼る';
+    // GoogleスプレッドシートのCSV公開URLをここに貼ってください
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/スプレッドシートのID/pub?output=csv';
 
     fetch(sheetUrl)
       .then(res => res.text())
@@ -41,7 +46,8 @@
           `;
           container.appendChild(postDiv);
         });
-      });
+      })
+      .catch(err => console.error('CSV読み込みエラー:', err));
   </script>
 </body>
 </html>
