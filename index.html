@@ -1,73 +1,76 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>実験募集掲示板</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="container">
-    <header class="site-title">
-      <h1>実験募集掲示板</h1>
-    </header>
+<script>
+  // GoogleスプレッドシートのCSV公開URL
+  const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?output=csv';
 
-    <!-- 投稿リスト表示エリア -->
-    <section id="posts" class="post-list">
-      <div id="loading" class="loading">投稿を読み込んでいます...</div>
-      <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
-    </section>
+  const postsContainer = document.getElementById('posts');
+  const loading = document.getElementById('loading');
+  const error = document.getElementById('error');
 
-    <footer class="footer">
-      © あなたの研究室名
-    </footer>
-  </div>
+  fetch(sheetUrl)
+    .then(res => {
+      if (!res.ok) throw new Error('ネットワークエラー');
+      return res.text();
+    })
+    .then(csvText => {
+      loading.style.display = 'none';
+      const rows = parseCSV(csvText).slice(1); // ヘッダーを除く
 
-  <script>
-    // ✅ GoogleスプレッドシートのCSV公開URLをここに貼る
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?output=csv';
+      if (rows.length === 0) {
+        postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
+        return;
+      }
 
-    const postsContainer = document.getElementById('posts');
-    const loading = document.getElementById('loading');
-    const error = document.getElementById('error');
+      rows.forEach(cols => {
+        if (cols.length < 3) return;
+        const title = cols[0].trim();
+        const body = cols[1].trim();
+        const formUrl = cols[2].trim();
 
-    fetch(sheetUrl)
-      .then(res => {
-        if (!res.ok) throw new Error('ネットワークエラー');
-        return res.text();
-      })
-      .then(csvText => {
-        loading.style.display = 'none';
-        const rows = csvText.split('\n').slice(1); // ヘッダーを除く
-
-        if (rows.length === 0) {
-          postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
-          return;
-        }
-
-        rows.forEach(row => {
-          const cols = row.split(',');
-          if (cols.length < 3) return;
-
-          const title = cols[0].trim();
-          const body = cols[1].trim();
-          const formUrl = cols[2].trim();
-
-          const postDiv = document.createElement('div');
-          postDiv.className = 'post card';
-          postDiv.innerHTML = `
-            <h2>${title}</h2>
-            <p>${body}</p>
-            <a class="button" href="${formUrl}" target="_blank">応募する</a>
-          `;
-          postsContainer.appendChild(postDiv);
-        });
-      })
-      .catch(err => {
-        console.error('CSV読み込みエラー:', err);
-        loading.style.display = 'none';
-        error.style.display = 'block';
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post card';
+        postDiv.innerHTML = `
+          <h2>${title}</h2>
+          <p>${body}</p>
+          <a class="button" href="${formUrl}" target="_blank">応募する</a>
+        `;
+        postsContainer.appendChild(postDiv);
       });
-  </script>
-</body>
-</html>
+    })
+    .catch(err => {
+      console.error('CSV読み込みエラー:', err);
+      loading.style.display = 'none';
+      error.style.display = 'block';
+    });
+
+  // ✅ カンマや改行を含むCSVにも対応した関数
+  function parseCSV(str) {
+    const rows = [];
+    let current = '';
+    let inQuotes = false;
+    const lines = str.split('\n');
+    for (let line of lines) {
+      const cols = [];
+      let col = '';
+      inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') {
+          if (inQuotes && line[i + 1] === '"') {
+            col += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (c === ',' && !inQuotes) {
+          cols.push(col);
+          col = '';
+        } else {
+          col += c;
+        }
+      }
+      cols.push(col);
+      rows.push(cols);
+    }
+    return rows;
+  }
+</script>
