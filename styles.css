@@ -203,3 +203,89 @@ iframe {
     padding: 1.5rem;
   }
 }
+
+/* ===== 投稿カード一覧 ===== */
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 投稿カード */
+.post.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 1.8rem;
+  transition: box-shadow 0.25s ease;
+}
+
+.post.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* ヘッダー（タイトル＋日時） */
+.post-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.post-header h2 {
+  font-size: 1.3rem;
+  color: #1e3a8a; /* 深い青 */
+  margin: 0;
+}
+
+.post-number {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.post-timestamp {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* 詳細エリア（初期は非表示） */
+.post-detail {
+  margin-top: 0.8rem;
+  color: #374151;
+  line-height: 1.7;
+}
+
+/* トグルボタン */
+.toggle-btn {
+  margin-top: 1rem;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.toggle-btn:hover {
+  background-color: #1e40af;
+  transform: translateY(-2px);
+}
+
+.toggle-btn:active {
+  transform: translateY(0);
+}
+
+/* ローディング・エラー表示 */
+.loading,
+.error {
+  text-align: center;
+  color: #4b5563;
+  margin: 2rem 0;
+  font-size: 1rem;
+}
+
+.error {
+  color: #dc2626;
+}
