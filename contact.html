@@ -18,6 +18,22 @@
         <li><a href="recruit.html">掲載</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
       </ul>
+      
+      <script>
+  // 現在のページファイル名を取得（例: "policy.html"）
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // すべてのナビゲーションリンクを取得
+  const navLinks = document.querySelectorAll(".nav-links a");
+
+  navLinks.forEach(link => {
+    // 各リンクのhrefを比較
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active"); // 一致したリンクにactiveを付与
+    }
+  });
+</script>
+
     </nav>
   </header>
 
