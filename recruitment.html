@@ -3,20 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ポリシー | 実験募集掲示板</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>募集 | サイト名</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-container">
-      <h1 class="site-title">実験募集掲示板</h1>
-      <nav class="nav">
-        <ul>
-          <li><a href="index.html">ホーム</a></li>
-          <li><a href="policy.html" class="active">ポリシー</a></li>
-          <li><a href="recruit.html">募集</a></li>
-          <li><a href="contact.html">お問い合わせ</a></li>
-        </ul>
-      </nav>
-    </div>
+  <header>
+    <h1>サイト名</h1>
+    <nav>
+      <a href="index.html">ホーム</a>
+      <a href="recruit.html" class="active">募集</a>
+      <a href="contact.html">お問い合わせ</a>
+    </nav>
   </header>
+
+  <main class="form-container">
+    <h2>募集要項</h2>
+    <p>当サイトでは、共に創作・開発に取り組むメンバーを募集しています。</p>
+
+    <section class="recruit-info">
+      <h3>募集内容</h3>
+      <ul>
+        <li>ポジション：Webエンジニア / デザイナー / ライター</li>
+        <li>活動形態：リモート可、週1〜2回ミーティング</li>
+        <li>報酬：応相談</li>
+      </ul>
+    </section>
+
+    <h3>応募フォーム</h3>
+    <form>
+      <label>お名前：</label>
+      <input type="text" name="name" required>
+
+      <label>メールアドレス：</label>
+      <input type="email" name="email" required>
+
+      <label>希望ポジション：</label>
+      <select name="position">
+        <option>Webエンジニア</option>
+        <option>デザイナー</option>
+        <option>ライター</option>
+        <option>その他</option>
+      </select>
+
+      <label>自己紹介・意気込み：</label>
+      <textarea name="message" rows="5"></textarea>
+
+      <button type="submit">送信</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 サイト名</p>
+  </footer>
+</body>
+</html>
