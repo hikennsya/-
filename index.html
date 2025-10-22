@@ -93,30 +93,28 @@
           return;
         }
 
-        rows.reverse().forEach((cols, index) => {
-          if (cols.length < 3) return; // タイトル・短文・長文①・長文②が必要
+  rows.reverse().forEach((cols, index) => {
+  if (cols.length < 4) return; // タイムスタンプ・メール・実験名・詳細が必要
 
-          const title = cols[0].trim();
-          const shortDesc = cols[1].trim();
-          const longDesc1 = cols[2].trim().replace(/\r?\n/g, '<br>');
-          const longDesc2 = cols[3].trim().replace(/\r?\n/g, '<br>');
-          const longDesc3 = cols[4].trim().replace(/\r?\n/g, '<br>');
+  const timestamp = cols[0].trim();
+  const experimentName = cols[2].trim();
+  const detail = cols[3].trim().replace(/\r?\n/g, '<br>');
 
+  const postDiv = document.createElement('div');
+  postDiv.className = 'post card';
+  postDiv.innerHTML = `
+    <div class="post-header">
+      <span class="post-number">#${rows.length - index}</span>
+      <span class="post-timestamp">${timestamp}</span>
+      <h2>${experimentName}</h2>
+    </div>
+    <div class="post-detail">
+      <p>${detail}</p>
+    </div>
+  `;
 
-          const postDiv = document.createElement('div');
-          postDiv.className = 'post card';
-          postDiv.innerHTML = `
-            <div class="post-header">
-              <span class="post-number">#${rows.length - index}</span>
-              <h2>${title}</h2>
-            </div>
-            <p class="post-short">${longDesc1}　</p>
-            <div class="post-detail" style="display:none;">
-              <p>${longDesc2}</p>
-              <p>${longDesc3}</p>
-            </div>
-            <button class="toggle-btn">▼ 詳細を表示</button>
-          `;
+  document.getElementById('posts-container').appendChild(postDiv);
+});
 
           // ✅ 詳細開閉
           const toggleBtn = postDiv.querySelector('.toggle-btn');
