@@ -38,6 +38,42 @@
     const loading = document.getElementById('loading');
     const error = document.getElementById('error');
 
+    // ✅ カンマ・改行対応のCSVパーサー関数
+    function parseCSV(text) {
+      const rows = [];
+      let current = '';
+      let insideQuote = false;
+      let row = [];
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        if (char === '"') {
+          // 次の文字が " の場合 → エスケープされた引用符
+          if (text[i + 1] === '"') {
+            current += '"';
+            i++;
+          } else {
+            insideQuote = !insideQuote;
+          }
+        } else if (char === ',' && !insideQuote) {
+          row.push(current);
+          current = '';
+        } else if ((char === '\n' || char === '\r') && !insideQuote) {
+          if (current || row.length) {
+            row.push(current);
+            rows.push(row);
+            row = [];
+            current = '';
+          }
+        } else {
+          current += char;
+        }
+      }
+      if (current || row.length) row.push(current);
+      if (row.length) rows.push(row);
+      return rows;
+    }
+
     fetch(sheetUrl)
       .then(res => {
         if (!res.ok) throw new Error('ネットワークエラー');
@@ -45,20 +81,20 @@
       })
       .then(csvText => {
         loading.style.display = 'none';
-        const rows = csvText.split('\n').slice(1); // ヘッダーを除く
+        const allRows = parseCSV(csvText);
+        const rows = allRows.slice(1); // ヘッダーを除く
 
         if (rows.length === 0) {
           postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
           return;
         }
 
-        rows.forEach((row, index) => {
-          const cols = row.split(',');
+        rows.forEach((cols, index) => {
           if (cols.length < 3) return; // 3列以上を想定
 
-          const title = cols[0].trim();   // タイトル
-          const shortDesc = cols[1].trim(); // 短文（最初に表示）
-          const longDesc = cols[2].trim();  // 長文（クリックで表示）
+          const title = cols[0].trim();
+          const shortDesc = cols[1].trim();
+          const longDesc = cols[2].trim().replace(/\r?\n/g, '<br>'); // 改行をHTML化
 
           const postDiv = document.createElement('div');
           postDiv.className = 'post card';
@@ -74,7 +110,7 @@
             <button class="toggle-btn">▼ 詳細を表示</button>
           `;
 
-          // ✅ クリックで詳細を開閉
+          // ✅ 詳細を開閉
           const toggleBtn = postDiv.querySelector('.toggle-btn');
           const detail = postDiv.querySelector('.post-detail');
           toggleBtn.addEventListener('click', () => {
