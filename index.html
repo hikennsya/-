@@ -92,7 +92,7 @@
           return;
         }
 
-        rows.forEach((cols, index) => {
+        rows.reverse().forEach((cols, index) => {
           if (cols.length < 5) return; // タイトル・短文・長文①・長文②が必要
 
           const title = cols[0].trim();
