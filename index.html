@@ -1,132 +1,97 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>実験募集掲示板</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header class="site-header">
-    <nav class="navbar">
-      <h1 class="logo">実験募集掲示板</h1>
-      <ul class="nav-links">
-        <li><a href="index.html">ホーム</a></li>
-        <li><a href="policy.html">ポリシー</a></li>
-        <li><a href="#posts">募集</a></li>
-        <li><a href="contact.html">お問い合わせ</a></li>
-      </ul>
-    </nav>
-  </header>
+<script>
+  const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?output=csv';
 
-  <main class="container">
-    <section id="posts" class="post-list">
-      <div id="loading" class="loading">投稿を読み込んでいます...</div>
-      <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
-    </section>
-  </main>
+  const postsContainer = document.getElementById('posts');
+  const loading = document.getElementById('loading');
+  const error = document.getElementById('error');
 
-  <footer class="footer">
-    © あなたの研究室名
-  </footer>
+  function parseCSV(text) {
+    const rows = [];
+    let current = '';
+    let insideQuote = false;
+    let row = [];
 
-  <script>
-    // ✅ GoogleスプレッドシートのCSV公開URL
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?output=csv';
-
-    const postsContainer = document.getElementById('posts');
-    const loading = document.getElementById('loading');
-    const error = document.getElementById('error');
-
-    // ✅ カンマ・改行対応のCSVパーサー
-    function parseCSV(text) {
-      const rows = [];
-      let current = '';
-      let insideQuote = false;
-      let row = [];
-
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        if (char === '"') {
-          if (text[i + 1] === '"') {
-            current += '"';
-            i++;
-          } else {
-            insideQuote = !insideQuote;
-          }
-        } else if (char === ',' && !insideQuote) {
-          row.push(current);
-          current = '';
-        } else if ((char === '\n' || char === '\r') && !insideQuote) {
-          if (current || row.length) {
-            row.push(current);
-            rows.push(row);
-            row = [];
-            current = '';
-          }
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (char === '"') {
+        if (text[i + 1] === '"') {
+          current += '"';
+          i++;
         } else {
-          current += char;
+          insideQuote = !insideQuote;
         }
+      } else if (char === ',' && !insideQuote) {
+        row.push(current);
+        current = '';
+      } else if ((char === '\n' || char === '\r') && !insideQuote) {
+        if (current || row.length) {
+          row.push(current);
+          rows.push(row);
+          row = [];
+          current = '';
+        }
+      } else {
+        current += char;
       }
-      if (current || row.length) row.push(current);
-      if (row.length) rows.push(row);
-      return rows;
     }
+    if (current || row.length) row.push(current);
+    if (row.length) rows.push(row);
+    return rows;
+  }
 
-    fetch(sheetUrl)
-      .then(res => {
-        if (!res.ok) throw new Error('ネットワークエラー');
-        return res.text();
-      })
-      .then(csvText => {
-        loading.style.display = 'none';
-        const allRows = parseCSV(csvText);
-        const rows = allRows.slice(1); // ヘッダー除外
+  fetch(sheetUrl)
+    .then(res => {
+      if (!res.ok) throw new Error('ネットワークエラー');
+      return res.text();
+    })
+    .then(csvText => {
+      loading.style.display = 'none';
+      const allRows = parseCSV(csvText);
+      const rows = allRows.slice(1); // ヘッダー除外
 
-        if (rows.length === 0) {
-          postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
-          return;
-        }
+      if (rows.length === 0) {
+        postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
+        return;
+      }
 
-        rows.forEach((cols, index) => {
-          if (cols.length < 5) return; // タイトル・短文・長文は必須
+      rows.forEach((cols, index) => {
+        if (cols.length < 4) return; // タイトル・短文・長文①・長文②が必要
 
-          const title = cols[0].trim();
-          const shortDesc = cols[1].trim();
-          const longDesc = cols[2].trim().replace(/\r?\n/g, '<br>');
-          const longDesc = cols[3].trim().replace(/\r?\n/g, '<br>');
+        const title = cols[0].trim();
+        const shortDesc = cols[1].trim();
+        const longDesc1 = cols[2].trim().replace(/\r?\n/g, '<br>');
+        const longDesc2 = cols[3].trim().replace(/\r?\n/g, '<br>');
 
-          const postDiv = document.createElement('div');
-          postDiv.className = 'post card';
-          postDiv.innerHTML = `
-            <div class="post-header">
-              <span class="post-number">#${index + 1}</span>
-              <h2>${title}</h2>
-            </div>
-            <p class="post-short">${shortDesc}</p>
-            <div class="post-detail" style="display:none;">
-              <p>${longDesc}</p>
-            </div>
-            <button class="toggle-btn">▼ 詳細を表示</button>
-          `;
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post card';
+        postDiv.innerHTML = `
+          <div class="post-header">
+            <span class="post-number">#${index + 1}</span>
+            <h2>${title}</h2>
+          </div>
+          <p class="post-short">${shortDesc}</p>
+          <div class="post-detail" style="display:none;">
+            <p>${longDesc1}</p>
+            <p>${longDesc2}</p>
+          </div>
+          <button class="toggle-btn">▼ 詳細を表示</button>
+        `;
 
-          // ✅ 詳細を開閉
-          const toggleBtn = postDiv.querySelector('.toggle-btn');
-          const detail = postDiv.querySelector('.post-detail');
-          toggleBtn.addEventListener('click', () => {
-            const isVisible = detail.style.display === 'block';
-            detail.style.display = isVisible ? 'none' : 'block';
-            toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
-          });
-
-          postsContainer.appendChild(postDiv);
+        // ✅ 詳細の開閉
+        const toggleBtn = postDiv.querySelector('.toggle-btn');
+        const detail = postDiv.querySelector('.post-detail');
+        toggleBtn.addEventListener('click', () => {
+          const isVisible = detail.style.display === 'block';
+          detail.style.display = isVisible ? 'none' : 'block';
+          toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
         });
-      })
-      .catch(err => {
-        console.error('CSV読み込みエラー:', err);
-        loading.style.display = 'none';
-        error.style.display = 'block';
+
+        postsContainer.appendChild(postDiv);
       });
-  </script>
-</body>
-</html>
+    })
+    .catch(err => {
+      console.error('CSV読み込みエラー:', err);
+      loading.style.display = 'none';
+      error.style.display = 'block';
+    });
+</script>
