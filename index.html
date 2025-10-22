@@ -94,7 +94,7 @@
         }
 
         rows.reverse().forEach((cols, index) => {
-          if (cols.length < 4) return; // タイトル・短文・長文①・長文②が必要
+          if (cols.length < 3) return; // タイトル・短文・長文①・長文②が必要
 
           const title = cols[0].trim();
           const shortDesc = cols[1].trim();
