@@ -92,39 +92,39 @@
           postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
           return;
         }
-        rows.reverse().forEach((cols, index) => {
-          if (cols.length < 4) return; // タイムスタンプ・メール・実験名・詳細が必要
+       rows.reverse().forEach((cols, index) => {
+  if (cols.length < 3) return; // タイムスタンプ・実験名・詳細が必要
 
-   
-      const timestamp = cols[0].trim();
-      const experimentName = cols[2].trim();
-      const detailText = cols[3].trim().replace(/\r?\n/g, '<br>');
+  const timestamp = cols[0].trim();     // A列（タイムスタンプ）
+  const experimentName = cols[1].trim(); // B列（実験名）←C列が1つ前に詰まった
+  const detailText = cols[2].trim().replace(/\r?\n/g, '<br>'); // C列（詳細）
 
-      const postDiv = document.createElement('div');
-      postDiv.className = 'post card';
-      postDiv.innerHTML = `
-        <div class="post-header">
-          <span class="post-number">#${rows.length - index}</span>
-          <span class="post-timestamp">${timestamp}</span>
-          <h2>${experimentName}</h2>
-        </div>
-        <div class="post-detail" style="display:none;">
-          <p>${detailText}</p>
-        </div>
-        <button class="toggle-btn">▼ 詳細を表示</button>
-      `;
+  const postDiv = document.createElement('div');
+  postDiv.className = 'post card';
+  postDiv.innerHTML = `
+    <div class="post-header">
+      <span class="post-number">#${rows.length - index}</span>
+      <span class="post-timestamp">${timestamp}</span>
+      <h2>${experimentName}</h2>
+    </div>
+    <div class="post-detail" style="display:none;">
+      <p>${detailText}</p>
+    </div>
+    <button class="toggle-btn">▼ 詳細を表示</button>
+  `;
 
-      // 詳細開閉
-      const toggleBtn = postDiv.querySelector('.toggle-btn');
-      const detail = postDiv.querySelector('.post-detail');
-      toggleBtn.addEventListener('click', () => {
-        const isVisible = detail.style.display === 'block';
-        detail.style.display = isVisible ? 'none' : 'block';
-        toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
-      });
+  // ✅ 詳細開閉
+  const toggleBtn = postDiv.querySelector('.toggle-btn');
+  const detail = postDiv.querySelector('.post-detail');
+  toggleBtn.addEventListener('click', () => {
+    const isVisible = detail.style.display === 'block';
+    detail.style.display = isVisible ? 'none' : 'block';
+    toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
+  });
 
-          postsContainer.appendChild(postDiv);
-        });
+  postsContainer.appendChild(postDiv);
+});
+
       })
       .catch(err => {
         console.error('CSV読み込みエラー:', err);
