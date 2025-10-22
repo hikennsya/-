@@ -205,11 +205,7 @@ iframe {
 }
 
 /* ===== 投稿カード一覧 ===== */
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+
 
 /* 投稿カード */
 .post.card {
@@ -252,7 +248,7 @@ iframe {
 .post-detail {
   margin-top: 0.8rem;
   color: #374151;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 /* トグルボタン */
