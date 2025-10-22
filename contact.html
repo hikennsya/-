@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ | サイト名</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>サイト名</h1>
+    <nav>
+      <a href="index.html">ホーム</a>
+      <a href="recruit.html">募集</a>
+      <a href="contact.html" class="active">お問い合わせ</a>
+    </nav>
+  </header>
+
+  <main class="form-container">
+    <h2>お問い合わせ</h2>
+    <p>ご質問・ご相談などありましたら、以下のフォームからご連絡ください。</p>
+
+    <form>
+      <label>お名前：</label>
+      <input type="text" name="name" required>
+
+      <label>メールアドレス：</label>
+      <input type="email" name="email" required>
+
+      <label>件名：</label>
+      <input type="text" name="subject">
+
+      <label>お問い合わせ内容：</label>
+      <textarea name="message" rows="5" required></textarea>
+
+      <button type="submit">送信</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 サイト名</p>
+  </footer>
+</body>
+</html>
