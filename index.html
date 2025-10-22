@@ -89,12 +89,12 @@
         }
 
         rows.forEach((cols, index) => {
-          if (cols.length < 3) return; // タイトル・短文・長文は必須
+          if (cols.length < 5) return; // タイトル・短文・長文は必須
 
           const title = cols[0].trim();
           const shortDesc = cols[1].trim();
           const longDesc = cols[2].trim().replace(/\r?\n/g, '<br>');
-          const link = cols[3] ? cols[3].trim() : ''; // 4列目（URL）
+          const longDesc = cols[3].trim().replace(/\r?\n/g, '<br>');
 
           const postDiv = document.createElement('div');
           postDiv.className = 'post card';
