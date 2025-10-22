@@ -1,87 +1,184 @@
+/* ===== ベース設定 ===== */
 body {
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
+  font-family: "Hiragino Sans", "Noto Sans JP", "Helvetica Neue", Arial, sans-serif;
+  background-color: #f7f8fa;
+  color: #1f2937;
   margin: 0;
   line-height: 1.6;
 }
 
+h1, h2, h3 {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===== ヘッダー・ナビゲーション ===== */
 header {
-  background: #222;
+  background: #2563eb; /* 明るい青 */
   color: #fff;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 nav a {
   color: #fff;
-  text-decoration: none;
-  margin-left: 1rem;
+  font-weight: 500;
   transition: 0.3s;
 }
 
 nav a:hover,
 nav a.active {
-  color: #ffcc00;
+  color: #ffeb3b;
 }
 
+/* ===== メインコンテンツ ===== */
 main.form-container {
-  max-width: 600px;
-  margin: 2rem auto;
+  max-width: 700px;
+  margin: 3rem auto;
   background: #fff;
-  padding: 2rem;
+  padding: 2.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+main.form-container h2 {
   text-align: center;
   margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #1e3a8a;
 }
 
+main.form-container p {
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== 募集要項セクション ===== */
+.recruit-info {
+  background: #f3f4f6;
+  border-left: 4px solid #2563eb;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.recruit-info h3 {
+  color: #1f2937;
+  margin-bottom: 0.6rem;
+}
+
+.recruit-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recruit-info li {
+  padding: 0.4rem 0;
+  color: #374151;
+}
+
+/* ===== フォーム共通 ===== */
 form {
   display: flex;
   flex-direction: column;
+  gap: 1.2rem;
 }
 
 label {
-  margin-top: 1rem;
   font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #111827;
 }
 
 input,
 textarea,
 select {
-  padding: 0.7rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   font-size: 1rem;
-  margin-top: 0.3rem;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  outline: none;
+}
+
+/* ===== 送信ボタン ===== */
 button {
-  margin-top: 1.5rem;
-  background: #0078ff;
+  background: #2563eb;
   color: #fff;
   border: none;
-  padding: 0.8rem;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 8px;
+  padding: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
-  background: #005fcc;
+  background: #1e40af;
+  transform: translateY(-2px);
 }
 
+button:active {
+  transform: translateY(0);
+}
+
+/* ===== フッター ===== */
 footer {
   text-align: center;
-  padding: 1rem;
-  background: #222;
-  color: #fff;
+  padding: 1.2rem;
+  background: #111827;
+  color: #d1d5db;
   margin-top: 3rem;
   font-size: 0.9rem;
+}
+
+/* ===== レスポンシブ対応 ===== */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav {
+    margin-top: 0.5rem;
+    gap: 1rem;
+  }
+
+  main.form-container {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
 }
