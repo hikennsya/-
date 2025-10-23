@@ -67,7 +67,7 @@ main.form-container,
   max-width: 1100px; /* ✅ 幅を広げた */
   margin: 3rem auto;
   background: none;   /* ✅ 白背景削除 */
-  padding: 0 1.5rem;  /* ✅ 左右に少し余白だけ */
+  padding: 0 0.8rem;  /* ✅ 左右に少し余白だけ */
   box-shadow: none;   /* ✅ 影削除 */
   border-radius: 0;   /* ✅ 角丸削除 */
 }
@@ -199,8 +199,8 @@ iframe {
 
   main.form-container,
   .container {
-    margin: 1.5rem;
-    padding: 1.5rem;
+    margin: 1rem;
+    padding: 1rem;
   }
 }
 
