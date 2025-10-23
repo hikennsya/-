@@ -203,6 +203,27 @@ iframe {
   border: none;
 }
 
+.form-link {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.form-link a {
+  display: inline-block;
+  background-color: #2563eb;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.form-link a:hover {
+  background-color: #1e40af;
+}
+
+
 /* ===== レスポンシブ対応 ===== */
 @media (max-width: 700px) {
   /* ナビゲーション（縦並び・詰める） */
