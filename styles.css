@@ -217,7 +217,7 @@ iframe {
   box-shadow: none; /* ✅ 影削除 */
   border: none;
   padding: 1rem 0;
-  border-bottom: 1px solid #e5e7eb; /* ✅ 区切り線で整える */
+  border-bottom: 1px solid #000000; /* ✅ 区切り線で整える */
   transition: none;
 }
 
