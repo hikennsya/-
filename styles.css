@@ -203,6 +203,64 @@ iframe {
     padding: 1rem;
   }
 }
+@media (max-width: 700px) {
+  /* 既存の設定 */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  main.form-container,
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  /* ▼ 追加部分 ▼ */
+
+  /* 全体の文字サイズを少し小さく */
+  body {
+    font-size: 0.95rem; /* 通常より少し小さめ */
+  }
+
+  /* ヘッダー全体をコンパクトに */
+  .navbar {
+    padding: 0.6rem 1rem; /* 高さを減らす */
+  }
+
+  .logo a {
+    font-size: 1.1rem; /* ロゴ文字も少し小さく */
+  }
+
+  .nav-links {
+    gap: 0.8rem; /* ナビ間隔を詰める */
+  }
+
+  .nav-links a {
+    font-size: 0.9rem; /* ナビ文字を少し小さく */
+  }
+
+  /* 投稿タイトルなどの調整 */
+  .post-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .post-detail {
+    font-size: 0.95rem;
+  }
+
+  /* フッターも少しコンパクトに */
+  footer {
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+}
 
 /* ===== 投稿カード一覧 ===== */
 .post-list {
