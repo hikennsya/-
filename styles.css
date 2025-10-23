@@ -205,64 +205,37 @@ iframe {
 
 /* ===== レスポンシブ対応 ===== */
 @media (max-width: 700px) {
+  /* ナビゲーション（縦並び・詰める） */
   .navbar {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8rem;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  main.form-container,
-  .container {
-    margin: 1rem;
-    padding: 1rem;
-  }
-}
-@media (max-width: 700px) {
-  /* 既存の設定 */
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  main.form-container,
-  .container {
-    margin: 1rem;
-    padding: 1rem;
-  }
-
-  /* ▼ 追加部分 ▼ */
-
-  /* 全体の文字サイズを少し小さく */
-  body {
-    font-size: 0.95rem; /* 通常より少し小さめ */
-  }
-
-  /* ヘッダー全体をコンパクトに */
-  .navbar {
     padding: 0.6rem 1rem; /* 高さを減らす */
   }
 
-  .logo a {
-    font-size: 1.1rem; /* ロゴ文字も少し小さく */
-  }
-
   .nav-links {
+    flex-wrap: wrap;
     gap: 0.8rem; /* ナビ間隔を詰める */
   }
 
   .nav-links a {
-    font-size: 0.9rem; /* ナビ文字を少し小さく */
+    font-size: 0.9rem; /* ナビ文字を小さく */
+  }
+
+  .logo a {
+    font-size: 1.1rem; /* ロゴ文字を小さく */
+  }
+
+  /* 全体の余白 */
+  main.form-container,
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  /* 全体の文字サイズを少し小さく */
+  body {
+    font-size: 0.95rem;
   }
 
   /* 投稿タイトルなどの調整 */
@@ -274,12 +247,37 @@ iframe {
     font-size: 0.95rem;
   }
 
-  /* フッターも少しコンパクトに */
+  /* intro-section の見出しと本文 */
+  .intro-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .intro-section p {
+    font-size: 0.9rem;
+  }
+
+  /* 投稿カード（post-card） */
+  .post-card {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  .post-card h3 {
+    font-size: 1rem;
+  }
+
+  .post-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* フッター */
   footer {
     font-size: 0.8rem;
     padding: 1rem;
   }
 }
+
 
 /* ===== 投稿カード一覧 ===== */
 .post-list {
