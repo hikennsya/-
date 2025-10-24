@@ -267,6 +267,12 @@ iframe {
   .post-detail {
     font-size: 0.8rem;
   }
+  @media (max-width: 700px) {
+  .post-detail {
+    font-size: 0.7rem;
+  }
+}
+
 
   /* intro-section の見出しと本文 */
   .intro-section h2 {
