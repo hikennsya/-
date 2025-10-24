@@ -256,7 +256,7 @@ iframe {
 
   /* 全体の文字サイズを少し小さく */
   body {
-    font-size: 0.9rem;
+    font-size: 0.925rem;
   }
 
   /* 投稿タイトルなどの調整 */
@@ -288,7 +288,7 @@ iframe {
   }
 
   .post-card p {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     line-height: 1.6;
   }
 
