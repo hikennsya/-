@@ -256,7 +256,7 @@ iframe {
 
   /* 全体の文字サイズを少し小さく */
   body {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
 
   /* 投稿タイトルなどの調整 */
@@ -265,7 +265,7 @@ iframe {
   }
 
   .post-detail {
-    font-size: 0.925rem;
+    font-size: 0.8rem;
   }
 
   /* intro-section の見出しと本文 */
