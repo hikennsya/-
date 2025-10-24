@@ -267,10 +267,7 @@ iframe {
   .post-detail {
     font-size: 0.8rem;
   }
-  @media (max-width: 700px) {
-  .post-detail {
-    font-size: 0.7rem;
-  }
+
 }
 
 
@@ -280,7 +277,7 @@ iframe {
   }
 
   .intro-section p {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   /* 投稿カード（post-card） */
