@@ -277,7 +277,7 @@ iframe {
   }
 
   .intro-section p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 
   /* 投稿カード（post-card） */
@@ -287,11 +287,11 @@ iframe {
   }
 
   .post-card h3 {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .post-card p {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     line-height: 1.6;
   }
 
