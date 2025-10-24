@@ -256,7 +256,7 @@ iframe {
 
   /* 全体の文字サイズを少し小さく */
   body {
-    font-size: 0.925rem;
+    font-size: 0.95rem;
   }
 
   /* 投稿タイトルなどの調整 */
@@ -265,11 +265,8 @@ iframe {
   }
 
   .post-detail {
-    font-size: 0.8rem;
+    font-size: 0.925rem;
   }
-
-}
-
 
   /* intro-section の見出しと本文 */
   .intro-section h2 {
@@ -277,7 +274,7 @@ iframe {
   }
 
   .intro-section p {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   /* 投稿カード（post-card） */
@@ -287,11 +284,11 @@ iframe {
   }
 
   .post-card h3 {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .post-card p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     line-height: 1.6;
   }
 
