@@ -250,8 +250,8 @@ iframe {
   /* 全体の余白 */
   main.form-container,
   .container {
-    margin: 0.5rem!important;
-    padding: 0.5rem!important;
+    margin: 0.75rem!important;
+    padding: 0.75rem!important;
   }
 
   /* 全体の文字サイズを少し小さく */
