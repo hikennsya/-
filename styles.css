@@ -104,6 +104,23 @@ main.form-container p {
   margin-bottom: 1.5rem;
 }
 
+.official-links {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.official-links a {
+  color: #0077cc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.official-links a:hover {
+  text-decoration: underline;
+}
+
+
 /* ===== 募集要項セクション ===== */
 .recruit-info {
   background: #f3f4f6;
