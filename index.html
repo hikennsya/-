@@ -1,16 +1,38 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta name="google-site-verification" content="61fo7jboEh_yjqDy9wookQE0lFghsk4CQnk5VNTj1m0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ✅ Google サイト認証 -->
   <meta name="google-site-verification" content="61fo7jboEh_yjqDy9wookQE0lFghsk4CQnk5VNTj1m0" />
-  <title>被験者募集掲示板</title>
+
+  <!-- ✅ タイトル（検索結果の青文字） -->
+  <title>被験者募集掲示板｜大学研究・心理学実験への参加募集</title>
+
+  <!-- ✅ 検索結果に表示される説明文 -->
+  <meta name="description" content="大学などの研究・実験への参加者を募集する掲示板です。心理学実験、行動科学、認知研究などの被験者募集情報を掲載しています。研究参加の前にポリシーをご確認ください。" />
+
+  <!-- ✅ キーワード（補助的） -->
+  <meta name="keywords" content="被験者募集, 実験募集, 研究参加, 心理学実験, 行動科学, 大学生バイト, 実験モニター" />
+
+  <!-- ✅ OGP（SNSでのシェア表示） -->
+  <meta property="og:title" content="被験者募集掲示板｜研究・実験参加者募集サイト" />
+  <meta property="og:description" content="大学研究や心理学実験の被験者を募集しています。研究参加前にポリシーをご確認ください。" />
+  <meta property="og:url" content="https://hikennsya.github.io/-/index.html" />
+  <meta property="og:image" content="https://hikennsya.github.io/-/ogp.jpg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ja_JP" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ✅ favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <!-- ✅ ヘッダー（共通） -->
+  <!-- ✅ ヘッダー -->
   <header class="site-header">
     <nav class="navbar">
       <h1 class="logo"><a href="index.html">被験者募集掲示板</a></h1>
@@ -20,52 +42,43 @@
         <li><a href="recruit.html">掲載</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
       </ul>
-      
-      <script>
-  // 現在のページファイル名を取得（例: "policy.html"）
-  const currentPage = window.location.pathname.split("/").pop();
-
-  // すべてのナビゲーションリンクを取得
-  const navLinks = document.querySelectorAll(".nav-links a");
-
-  navLinks.forEach(link => {
-    // 各リンクのhrefを比較
-    if (link.getAttribute("href") === currentPage) {
-      link.classList.add("active"); // 一致したリンクにactiveを付与
-    }
-  });
-</script>
-
     </nav>
   </header>
 
+  <script>
+    // 現在ページを判定してナビを強調
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll(".nav-links a").forEach(link => {
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+    });
+  </script>
+
   <!-- ✅ メイン -->
   <main class="container">
-    
-      <!-- ✅ サイト説明文（投稿の上に追加） -->
-  <section class="intro-section">
-    <h2>このサイトについて</h2>
-    <p>
-      このサイト「被験者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。<br>
-      研究参加の際はポリシーをご確認ください。
-    </p>
-    <p class="official-links">
-  <a href="https://x.com/hikennsya_keiji" target="_blank">X(旧Twitter)</a> ｜ 
-  <a href="https://www.threads.net/@hikennsya_keijiban" target="_blank">Threads</a>
-</p>
-  </section>
-    
+    <section class="intro-section">
+      <h2>このサイトについて</h2>
+      <p>
+        このサイト「被験者募集掲示板」は、大学などの研究・実験への参加者を募集する目的で運営されています。<br>
+        研究参加の際はポリシーをご確認ください。
+      </p>
+      <p class="official-links">
+        <a href="https://x.com/hikennsya_keiji" target="_blank">X</a> ｜ 
+        <a href="https://www.threads.net/@hikennsya_keijiban" target="_blank">Threads</a>
+      </p>
+    </section>
+
     <section id="posts" class="post-list">
       <div id="loading" class="loading">投稿を読み込んでいます...</div>
       <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
     </section>
   </main>
 
- 
   <footer class="footer">
     © 被験者募集掲示板
   </footer>
-  
+
   <!-- ✅ Googleスプレッドシート連携 -->
   <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
@@ -74,7 +87,7 @@
     const loading = document.getElementById('loading');
     const error = document.getElementById('error');
 
-    // ✅ カンマ・改行対応CSVパーサー
+    // ✅ CSVパーサー（カンマ・改行対応）
     function parseCSV(text) {
       const rows = [];
       let current = '';
@@ -109,7 +122,7 @@
       return rows;
     }
 
-    // ✅ データ取得
+    // ✅ データ取得処理
     fetch(sheetUrl)
       .then(res => {
         if (!res.ok) throw new Error('ネットワークエラー');
@@ -118,45 +131,44 @@
       .then(csvText => {
         loading.style.display = 'none';
         const allRows = parseCSV(csvText);
-        const rows = allRows.slice(1); // ヘッダー除外
+        const rows = allRows.slice(1);
 
         if (rows.length === 0) {
           postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
           return;
         }
-       rows.reverse().forEach((cols, index) => {
-  if (cols.length < 3) return; // タイムスタンプ・実験名・詳細が必要
 
-  const timestamp = cols[0].trim();     // A列（タイムスタンプ）
-  const experimentName = cols[1].trim(); // B列（実験名）←C列が1つ前に詰まった
-  const detailText = cols[2].trim().replace(/\r?\n/g, '<br>'); // C列（詳細）
+        rows.reverse().forEach((cols, index) => {
+          if (cols.length < 3) return;
 
-  const postDiv = document.createElement('div');
-  postDiv.className = 'post card';
-  postDiv.innerHTML = `
-    <div class="post-header">
-      <span class="post-number">#${rows.length - index}</span>
-      <span class="post-timestamp">${timestamp}</span>
-      <h2>${experimentName}</h2>
-    </div>
-    <div class="post-detail" style="display:none;">
-      <p>${detailText}</p>
-    </div>
-    <button class="toggle-btn">▼ 詳細を表示</button>
-  `;
+          const timestamp = cols[0].trim();
+          const experimentName = cols[1].trim();
+          const detailText = cols[2].trim().replace(/\r?\n/g, '<br>');
 
-  // ✅ 詳細開閉
-  const toggleBtn = postDiv.querySelector('.toggle-btn');
-  const detail = postDiv.querySelector('.post-detail');
-  toggleBtn.addEventListener('click', () => {
-    const isVisible = detail.style.display === 'block';
-    detail.style.display = isVisible ? 'none' : 'block';
-    toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
-  });
+          const postDiv = document.createElement('div');
+          postDiv.className = 'post card';
+          postDiv.innerHTML = `
+            <div class="post-header">
+              <span class="post-number">#${rows.length - index}</span>
+              <span class="post-timestamp">${timestamp}</span>
+              <h2>${experimentName}</h2>
+            </div>
+            <div class="post-detail" style="display:none;">
+              <p>${detailText}</p>
+            </div>
+            <button class="toggle-btn">▼ 詳細を表示</button>
+          `;
 
-  postsContainer.appendChild(postDiv);
-});
+          const toggleBtn = postDiv.querySelector('.toggle-btn');
+          const detail = postDiv.querySelector('.post-detail');
+          toggleBtn.addEventListener('click', () => {
+            const isVisible = detail.style.display === 'block';
+            detail.style.display = isVisible ? 'none' : 'block';
+            toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
+          });
 
+          postsContainer.appendChild(postDiv);
+        });
       })
       .catch(err => {
         console.error('CSV読み込みエラー:', err);
