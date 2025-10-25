@@ -3,40 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>掲載</title>
+
+  <!-- タイトル（検索結果に表示） -->
+  <title>実験・調査の被験者募集掲載｜被験者募集掲示板</title>
+
+  <!-- 説明文（検索結果に表示） -->
+  <meta name="description" content="大学・企業・研究機関による実験や調査の被験者募集を無料で掲載できます。倫理承認済みの研究のみ掲載可能で、謝礼も明記してください。">
+
+  <!-- キーワード（参考程度） -->
+  <meta name="keywords" content="被験者募集, 実験, 調査, 研究参加, 心理学, 大学, 無料掲載">
+
+  <!-- OGP設定（SNSシェア用） -->
+  <meta property="og:title" content="実験・調査の被験者募集掲載｜被験者募集掲示板" />
+  <meta property="og:description" content="大学・企業・研究機関の実験や調査の被験者募集を無料掲載できます。倫理承認済みの研究のみ掲載。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hikennsya.github.io/-/recruit.html" />
+  <meta property="og:image" content="https://hikennsya.github.io/-/ogp-image.jpg" />
+  <meta property="og:locale" content="ja_JP" />
+
+  <!-- Twitterカード -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@hikennsya_official" />
+
+  <!-- CSS -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <!-- ✅ ヘッダー（共通） -->
+  <!-- ヘッダー -->
   <header class="site-header">
     <nav class="navbar">
       <h1 class="logo"><a href="index.html">被験者募集掲示板</a></h1>
       <ul class="nav-links">
-        <li><a href="index.html" >ホーム</a></li>
+        <li><a href="index.html">ホーム</a></li>
         <li><a href="policy.html">ポリシー</a></li>
-        <li><a href="recruit.html">掲載</a></li>
+        <li><a href="recruit.html" class="active">掲載</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
       </ul>
-
       <script>
-  // 現在のページファイル名を取得（例: "policy.html"）
-  const currentPage = window.location.pathname.split("/").pop();
-
-  // すべてのナビゲーションリンクを取得
-  const navLinks = document.querySelectorAll(".nav-links a");
-
-  navLinks.forEach(link => {
-    // 各リンクのhrefを比較
-    if (link.getAttribute("href") === currentPage) {
-      link.classList.add("active"); // 一致したリンクにactiveを付与
-    }
-  });
-</script>
-
+        const currentPage = window.location.pathname.split("/").pop();
+        const navLinks = document.querySelectorAll(".nav-links a");
+        navLinks.forEach(link => {
+          if (link.getAttribute("href") === currentPage) {
+            link.classList.add("active");
+          }
+        });
+      </script>
     </nav>
   </header>
 
+  <!-- メインコンテンツ -->
   <main class="form-container">
     <h2>掲載内容</h2>
     <p>実験の被験者を無料で募集することが可能です。</p>
@@ -50,28 +66,22 @@
         <li>実験・調査内容に虚偽を含まない。</li>
         <li>謝礼の有無は必ず明記してください。また謝礼がアマゾンギフト券など現金以外の場合も明記してください。</li>
         <li>当サイトを通じて行われる参加者募集に関連して生じたいかなる問題についても、当サイトは一切の責任を負いません。あらかじめご承知おきください。</li>
-          
       </ul>
     </section>
 
-   
-<main class="form-container">
-  <h2>掲載フォーム</h2>
+    <section class="recruit-form">
+      <h2>掲載フォーム</h2>
+      <p class="form-link">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSe9ct1JVa42u4tWHIqFQJegyq1s2b2rjiSpc84EBqq65QkLug/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">
+          フォームはこちら
+        </a>
+      </p>
+    </section>
+  </main>
 
-
-<p class="form-link">
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSe9ct1JVa42u4tWHIqFQJegyq1s2b2rjiSpc84EBqq65QkLug/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">
-    フォームはこちら
-  </a>
-</p>
-
-  
-</main>
-
-
- <footer class="footer">
+  <!-- フッター -->
+  <footer class="footer">
     © 被験者募集掲示板
   </footer>
-  
 </body>
 </html>
