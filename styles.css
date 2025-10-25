@@ -250,8 +250,8 @@ iframe {
   /* 全体の余白 */
   main.form-container,
   .container {
-    margin: 0.5rem;
-    padding: 0.5rem;
+    margin: 0.5rem!important;
+    padding: 0.5rem!important;
   }
 
   /* 全体の文字サイズを少し小さく */
@@ -280,7 +280,7 @@ iframe {
   /* 投稿カード（post-card） */
   .post-card {
     font-size: 0.9rem;
-    padding: 0.5rem;
+    padding: 0.5rem!important;
   }
 
   .post-card h3 {
