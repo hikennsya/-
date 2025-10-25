@@ -265,7 +265,7 @@ iframe {
   }
 
   .post-detail p {
-    font-size: 0.8rem;
+    font-size: 0.8rem !important;
   }
 
   /* intro-section の見出しと本文 */
