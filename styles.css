@@ -112,13 +112,11 @@ main.form-container p {
 
 .official-links a {
   color: #0077cc;
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: 500;
 }
 
-.official-links a:hover {
-  text-decoration: underline;
-}
+
 
 
 /* ===== 募集要項セクション ===== */
@@ -350,7 +348,7 @@ iframe {
 
 .post-number {
   color: #4ba6c4;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
 }
 
 .post-timestamp {
