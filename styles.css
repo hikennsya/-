@@ -264,8 +264,8 @@ iframe {
     font-size: 1.1rem;
   }
 
-  .post-detail {
-    font-size: 0.6rem;
+  .post-detail p {
+    font-size: 0.8rem;
   }
 
   /* intro-section の見出しと本文 */
@@ -274,7 +274,7 @@ iframe {
   }
 
   .intro-section p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   /* 投稿カード（post-card） */
