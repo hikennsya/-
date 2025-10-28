@@ -7,19 +7,12 @@
   <title>被験者募集掲示板｜大学研究・心理学実験への参加募集</title>
   <meta name="description" content="大学などの研究・実験への参加者を募集する掲示板です。心理学実験、行動科学、認知研究などの被験者募集情報を掲載しています。研究参加の前にポリシーをご確認ください。" />
   <meta name="keywords" content="被験者募集, 実験募集, 研究参加, 心理学実験, 行動科学, 大学生バイト, 実験モニター" />
-  <meta property="og:title" content="被験者募集掲示板｜研究・実験参加者募集サイト" />
-  <meta property="og:description" content="大学研究や心理学実験の被験者を募集しています。研究参加前にポリシーをご確認ください。" />
-  <meta property="og:url" content="https://hikennsya.github.io/-/index.html" />
-  <meta property="og:image" content="https://hikennsya.github.io/-/ogp.jpg" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="ja_JP" />
-  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <!-- ✅ ヘッダー -->
+  <!-- ヘッダー -->
   <header class="site-header">
     <nav class="navbar">
       <h1 class="logo"><a href="index.html">被験者募集掲示板</a></h1>
@@ -32,23 +25,18 @@
     </nav>
   </header>
 
-  <!-- ✅ 訪問者数カウンター -->
+  <!-- 訪問者数カウンター -->
   <div id="counter" class="counter">
     訪問者数: <span id="count">読み込み中...</span>
   </div>
   <script>
     fetch('https://script.google.com/macros/s/AKfycbzkczPCs150Vx1fwMPAqV66DmkCOFZ_fG93cSay5ajL-m86QwkHZagUUnOjYKEeyl2h/exec')
       .then(res => res.text())
-      .then(count => {
-        document.getElementById('count').textContent = count;
-      })
-      .catch(err => {
-        console.error('カウンター読み込みエラー:', err);
-        document.getElementById('count').textContent = '---';
-      });
+      .then(count => { document.getElementById('count').textContent = count; })
+      .catch(err => { console.error('カウンター読み込みエラー:', err); document.getElementById('count').textContent = '---'; });
   </script>
 
-  <!-- ✅ ナビ強調 -->
+  <!-- ナビ強調 -->
   <script>
     const currentPage = window.location.pathname.split("/").pop();
     document.querySelectorAll(".nav-links a").forEach(link => {
@@ -58,7 +46,7 @@
     });
   </script>
 
-  <!-- ✅ メイン -->
+  <!-- メイン -->
   <main class="container">
     <section class="intro-section">
       <h2>このサイトについて</h2>
@@ -80,81 +68,64 @@
 
   <footer class="footer">© 被験者募集掲示板</footer>
 
-  <!-- ✅ Googleスプレッドシート連携 -->
+  <!-- Googleスプレッドシート連携 -->
   <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxXSwlGP7lfLsh8L1jk0rz_RrWHSAUSBfmhv0fA-fhY--Em_vyUFACc76VSYXKHB8f0kw/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbw3Ra8h2lJFYo1TyMJ9kGr-z37c-YIa2w0YkdptYsD8ZtlE4-Pc_Z5swz1OdXGo9b8F/exec";
 
     const postsContainer = document.getElementById('posts');
     const loading = document.getElementById('loading');
     const error = document.getElementById('error');
 
-    // ✅ CSVパーサー
     function parseCSV(text) {
       const rows = [];
-      let current = '', insideQuote = false, row = [];
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        if (char === '"') {
-          if (text[i + 1] === '"') {
-            current += '"'; i++;
-          } else {
-            insideQuote = !insideQuote;
-          }
-        } else if (char === ',' && !insideQuote) {
-          row.push(current); current = '';
-        } else if ((char === '\n' || char === '\r') && !insideQuote) {
-          if (current || row.length) { row.push(current); rows.push(row); row = []; current = ''; }
-        } else {
-          current += char;
-        }
+      let current='', insideQuote=false, row=[];
+      for(let i=0;i<text.length;i++){
+        const char=text[i];
+        if(char==='"'){
+          if(text[i+1]==='"'){current+='"';i++;}else{insideQuote=!insideQuote;}
+        }else if(char===',' && !insideQuote){row.push(current); current='';}
+        else if((char==='\n'||char==='\r') && !insideQuote){
+          if(current||row.length){row.push(current); rows.push(row); row=[]; current='';}
+        }else{current+=char;}
       }
-      if (current || row.length) row.push(current);
-      if (row.length) rows.push(row);
+      if(current||row.length)row.push(current);
+      if(row.length)rows.push(row);
       return rows;
     }
 
-    // ✅ ハート・通報送信
-    function sendAction(id, type) {
-      fetch(scriptUrl, {
-        method: "POST",
-        body: JSON.stringify({ id, type }),
-        headers: { "Content-Type": "application/json" }
+    function sendAction(id, type){
+      fetch(scriptUrl,{
+        method:"POST",
+        body:JSON.stringify({id,type}),
+        headers:{"Content-Type":"application/json"}
       })
-      .then(res => res.text())
+      .then(res=>res.text())
       .then(console.log)
       .catch(console.error);
     }
 
-    // ✅ データ取得処理
     fetch(sheetUrl)
-      .then(res => {
-        if (!res.ok) throw new Error('ネットワークエラー');
-        return res.text();
-      })
-      .then(csvText => {
-        loading.style.display = 'none';
-        const allRows = parseCSV(csvText);
-        const rows = allRows.slice(1);
-        if (rows.length === 0) {
-          postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
-          return;
-        }
+      .then(res=>{if(!res.ok)throw new Error('ネットワークエラー');return res.text();})
+      .then(csvText=>{
+        loading.style.display='none';
+        const allRows=parseCSV(csvText);
+        const rows=allRows.slice(1);
+        if(rows.length===0){postsContainer.innerHTML='<p>現在、募集中の実験はありません。</p>'; return;}
 
-        rows.reverse().forEach((cols, index) => {
-          if (cols.length < 3) return;
+        rows.reverse().forEach((cols,index)=>{
+          if(cols.length<3)return;
+          const timestamp=cols[0].trim();
+          const experimentName=cols[1].trim();
+          const detailText=cols[2].trim().replace(/\r?\n/g,'<br>');
+          const heartCount=cols[3]||0;
+          const reportCount=cols[4]||0;
 
-          const timestamp = cols[0].trim();
-          const experimentName = cols[1].trim();
-          const detailText = cols[2].trim().replace(/\r?\n/g, '<br>');
-          const heartCount = cols[3] || 0;
-          const reportCount = cols[4] || 0;
-
-          const postDiv = document.createElement('div');
-          postDiv.className = 'post card';
-          postDiv.innerHTML = `
+          const postDiv=document.createElement('div');
+          postDiv.className='post card';
+          postDiv.innerHTML=`
             <div class="post-header">
-              <span class="post-number">#${rows.length - index}</span>
+              <span class="post-number">#${rows.length-index}</span>
               <span class="post-timestamp">${timestamp}</span>
               <h2>${experimentName}</h2>
             </div>
@@ -168,36 +139,42 @@
             <button class="toggle-btn">▼ 詳細を表示</button>
           `;
 
-          // 詳細表示切り替え
-          const toggleBtn = postDiv.querySelector('.toggle-btn');
-          const detail = postDiv.querySelector('.post-detail');
-          toggleBtn.addEventListener('click', () => {
-            const isVisible = detail.style.display === 'block';
-            detail.style.display = isVisible ? 'none' : 'block';
-            toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
+          // 詳細表示切替
+          const toggleBtn=postDiv.querySelector('.toggle-btn');
+          const detail=postDiv.querySelector('.post-detail');
+          toggleBtn.addEventListener('click',()=>{
+            const isVisible=detail.style.display==='block';
+            detail.style.display=isVisible?'none':'block';
+            toggleBtn.textContent=isVisible?'▼ 詳細を表示':'▲ 閉じる';
           });
 
-          // ❤️ハート
-          postDiv.querySelector('.heart-btn').addEventListener('click', () => {
-            const span = postDiv.querySelector('.heart-count');
-            span.textContent = Number(span.textContent) + 1;
-            sendAction(index, 'heart');
+          // ❤️ハート（一人一回制限）
+          postDiv.querySelector('.heart-btn').addEventListener('click',()=>{
+            const span=postDiv.querySelector('.heart-count');
+            const id='heart-'+index;
+            if(localStorage.getItem(id)){alert("この投稿にはすでにハートを押しています"); return;}
+            span.textContent=Number(span.textContent)+1;
+            sendAction(index,'heart');
+            localStorage.setItem(id,'1');
           });
 
-          // 🚨通報
-          postDiv.querySelector('.report-btn').addEventListener('click', () => {
-            const span = postDiv.querySelector('.report-count');
-            span.textContent = Number(span.textContent) + 1;
-            sendAction(index, 'report');
+          // 🚨通報（一人一回制限）
+          postDiv.querySelector('.report-btn').addEventListener('click',()=>{
+            const span=postDiv.querySelector('.report-count');
+            const id='report-'+index;
+            if(localStorage.getItem(id)){alert("この投稿にはすでに通報済みです"); return;}
+            span.textContent=Number(span.textContent)+1;
+            sendAction(index,'report');
+            localStorage.setItem(id,'1');
           });
 
           postsContainer.appendChild(postDiv);
         });
       })
-      .catch(err => {
-        console.error('CSV読み込みエラー:', err);
-        loading.style.display = 'none';
-        error.style.display = 'block';
+      .catch(err=>{
+        console.error('CSV読み込みエラー:',err);
+        loading.style.display='none';
+        error.style.display='block';
       });
   </script>
 </body>
