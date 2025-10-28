@@ -382,6 +382,41 @@ iframe {
   font-size: 0.95rem;
   transition: background-color 0.3s;
 }
+/* ボタン全体を小さく・コンパクトに */
+.buttons {
+  display: flex;
+  gap: 6px; /* ボタン間のすき間 */
+  margin-top: 6px;
+}
+
+/* ❤️ハートボタン・🚨通報ボタンの共通設定 */
+.heart-btn,
+.report-btn {
+  font-size: 14px;         /* ボタン内の文字サイズ（デフォルトより小さめ） */
+  padding: 4px 8px;        /* 内側の余白を減らす */
+  border: 1px solid #ccc;  /* 枠線を薄く追加 */
+  border-radius: 6px;      /* 角を少し丸く */
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 押したときの軽い反応 */
+.heart-btn:hover {
+  background-color: #ffeaea;
+  border-color: #f88;
+}
+.report-btn:hover {
+  background-color: #fff3e0;
+  border-color: #f90;
+}
+
+/* 数字を少し小さく */
+.heart-count,
+.report-count {
+  font-size: 12px;
+  margin-left: 4px;
+}
 
 .toggle-btn:hover {
   background-color: #d1d5db;
