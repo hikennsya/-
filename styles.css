@@ -396,7 +396,7 @@ iframe {
   padding: 4px 8px;        /* 内側の余白を減らす */
   border: 1px solid #ccc;  /* 枠線を薄く追加 */
   border-radius: 6px;      /* 角を少し丸く */
-  background-color: #f9f9f9;
+  background-color: #2563eb;
   cursor: pointer;
   transition: all 0.2s ease;
 }
