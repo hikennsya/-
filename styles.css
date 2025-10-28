@@ -392,22 +392,25 @@ iframe {
 /* ❤️ハートボタン・🚨通報ボタンの共通設定 */
 .heart-btn,
 .report-btn {
-  font-size: 14px;         /* ボタン内の文字サイズ（デフォルトより小さめ） */
-  padding: 4px 8px;        /* 内側の余白を減らす */
-  border: 1px solid #ccc;  /* 枠線を薄く追加 */
-  border-radius: 6px;      /* 角を少し丸く */
-  background-color: #2563eb;
+  font-size: 14px;             /* ボタン内の文字サイズ */
+  padding: 4px 8px;            /* 内側の余白 */
+  border: 1px solid #ccc;      /* 枠線 */
+  border-radius: 6px;          /* 角丸 */
+  background-color: #2563eb;   /* デフォルト背景色 */
+  color: #fff;                 /* 文字色 */
   cursor: pointer;
+  position: relative;          /* ツールチップ表示用 */
   transition: all 0.2s ease;
 }
 
-/* 押したときの軽い反応 */
+/* ホバー時の背景色変化 */
 .heart-btn:hover {
-  background-color: #ffeaea;
+  background-color: #ff4d4d;   /* ハートボタンは赤系に */
   border-color: #f88;
 }
+
 .report-btn:hover {
-  background-color: #fff3e0;
+  background-color: #ff9800;   /* 通報ボタンはオレンジ系に */
   border-color: #f90;
 }
 
@@ -418,8 +421,36 @@ iframe {
   margin-left: 4px;
 }
 
-.toggle-btn:hover {
-  background-color: #d1d5db;
+/* ホバー時にツールチップ表示 */
+.heart-btn::after,
+.report-btn::after {
+  content: attr(data-tooltip); /* data-tooltip属性を使う */
+  position: absolute;
+  bottom: 125%;               /* ボタンの上に表示 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0,0,0,0.75);
+  color: #fff;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+/* ホバーでツールチップ表示 */
+.heart-btn:hover::after,
+.report-btn:hover::after {
+  opacity: 1;
+}
+
+/* ボタン周りの余白調整（必要に応じて） */
+.buttons {
+  display: flex;
+  gap: 8px;  /* ボタン間のスペース */
 }
 
 /* ローディング・エラー表示 */
