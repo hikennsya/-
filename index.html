@@ -9,10 +9,21 @@
   <meta name="keywords" content="被験者募集, 実験募集, 研究参加, 心理学実験, 行動科学, 大学生バイト, 実験モニター" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .heart-btn, .report-btn {
+      font-size: 14px; padding: 4px 8px; border: 1px solid #ccc; border-radius:6px; background-color:#2563eb; cursor:pointer; transition: all 0.2s ease;
+    }
+    .heart-btn:hover { background-color:#ffeaea; border-color:#f88; }
+    .report-btn:hover { background-color:#fff3e0; border-color:#f90; }
+    .heart-count, .report-count { font-size:12px; margin-left:4px; }
+    .user-totals { margin:16px 0; font-weight:bold; }
+    .buttons { margin:8px 0; }
+    .post.card { border:1px solid #ddd; padding:12px; margin-bottom:16px; border-radius:6px; background:#f9f9f9; }
+    .toggle-btn { margin-top:8px; cursor:pointer; }
+  </style>
 </head>
 
 <body>
-  <!-- ヘッダー -->
   <header class="site-header">
     <nav class="navbar">
       <h1 class="logo"><a href="index.html">被験者募集掲示板</a></h1>
@@ -36,7 +47,6 @@
       .catch(err => { console.error('カウンター読み込みエラー:', err); document.getElementById('count').textContent = '---'; });
   </script>
 
-  <!-- ナビ強調 -->
   <script>
     const currentPage = window.location.pathname.split("/").pop();
     document.querySelectorAll(".nav-links a").forEach(link => {
@@ -46,7 +56,6 @@
     });
   </script>
 
-  <!-- メイン -->
   <main class="container">
     <section class="intro-section">
       <h2>このサイトについて</h2>
@@ -60,6 +69,12 @@
       </p>
     </section>
 
+    <!-- ユーザー合計表示 -->
+    <div class="user-totals">
+      あなたのハート合計: <span id="user-heart-total">0</span>　
+      あなたの通報合計: <span id="user-report-total">0</span>
+    </div>
+
     <section id="posts" class="post-list">
       <div id="loading" class="loading">投稿を読み込んでいます...</div>
       <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
@@ -68,7 +83,6 @@
 
   <footer class="footer">© 被験者募集掲示板</footer>
 
-  <!-- Googleスプレッドシート連携 -->
   <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
     const scriptUrl = "https://script.google.com/macros/s/AKfycbw3Ra8h2lJFYo1TyMJ9kGr-z37c-YIa2w0YkdptYsD8ZtlE4-Pc_Z5swz1OdXGo9b8F/exec";
@@ -76,6 +90,29 @@
     const postsContainer = document.getElementById('posts');
     const loading = document.getElementById('loading');
     const error = document.getElementById('error');
+
+    // localStorage で押下履歴管理
+    function hasClicked(postId, type){
+      const saved = JSON.parse(localStorage.getItem('clicks') || '{}');
+      return saved[postId] && saved[postId][type];
+    }
+    function markClicked(postId, type){
+      const saved = JSON.parse(localStorage.getItem('clicks') || '{}');
+      if(!saved[postId]) saved[postId] = { heart:false, report:false };
+      saved[postId][type] = true;
+      localStorage.setItem('clicks', JSON.stringify(saved));
+    }
+    function getUserTotal(type){
+      const saved = JSON.parse(localStorage.getItem('clicks') || '{}');
+      let total = 0;
+      Object.values(saved).forEach(val=>{ if(val[type]) total+=1; });
+      return total;
+    }
+    function updateUserTotals(){
+      document.getElementById('user-heart-total').textContent = getUserTotal('heart');
+      document.getElementById('user-report-total').textContent = getUserTotal('report');
+    }
+    updateUserTotals();
 
     function parseCSV(text) {
       const rows = [];
@@ -106,7 +143,7 @@
     }
 
     fetch(sheetUrl)
-      .then(res=>{if(!res.ok)throw new Error('ネットワークエラー');return res.text();})
+      .then(res=>{if(!res.ok)throw new Error('ネットワークエラー'); return res.text();})
       .then(csvText=>{
         loading.style.display='none';
         const allRows=parseCSV(csvText);
@@ -114,28 +151,25 @@
         if(rows.length===0){postsContainer.innerHTML='<p>現在、募集中の実験はありません。</p>'; return;}
 
         rows.reverse().forEach((cols,index)=>{
-          if(cols.length<3)return;
-          const timestamp=cols[0].trim();
-          const experimentName=cols[1].trim();
-          const detailText=cols[2].trim().replace(/\r?\n/g,'<br>');
-          const heartCount=cols[3]||0;
-          const reportCount=cols[4]||0;
+          if(cols.length<3) return;
+          const timestamp = cols[0].trim();
+          const experimentName = cols[1].trim();
+          const detailText = cols[2].trim().replace(/\r?\n/g,'<br>');
+          const heartCount = cols[3] || 0;
+          const reportCount = cols[4] || 0;
 
-          const postDiv=document.createElement('div');
-          postDiv.className='post card';
-          postDiv.innerHTML=`
+          const postDiv = document.createElement('div');
+          postDiv.className = 'post card';
+          postDiv.innerHTML = `
             <div class="post-header">
               <span class="post-number">#${rows.length-index}</span>
               <span class="post-timestamp">${timestamp}</span>
               <h2>${experimentName}</h2>
             </div>
-     <!-- ユーザー合計表示 -->
-<div class="user-totals" style="margin:16px 0; font-weight:bold;">
-  あなたのハート合計: <span id="user-heart-total">0</span>　
-  あなたの通報合計: <span id="user-report-total">0</span>
-</div>
-
-
+            <div class="buttons">
+              <button class="heart-btn">❤️ <span class="heart-count">${heartCount}</span></button>
+              <button class="report-btn">🚨 <span class="report-count">${reportCount}</span></button>
+            </div>
             <div class="post-detail" style="display:none;">
               <p>${detailText}</p>
             </div>
@@ -143,38 +177,41 @@
           `;
 
           // 詳細表示切替
-          const toggleBtn=postDiv.querySelector('.toggle-btn');
-          const detail=postDiv.querySelector('.post-detail');
-          toggleBtn.addEventListener('click',()=>{
-            const isVisible=detail.style.display==='block';
-            detail.style.display=isVisible?'none':'block';
-            toggleBtn.textContent=isVisible?'▼ 詳細を表示':'▲ 閉じる';
+          const toggleBtn = postDiv.querySelector('.toggle-btn');
+          const detail = postDiv.querySelector('.post-detail');
+          toggleBtn.addEventListener('click', ()=>{
+            const isVisible = detail.style.display === 'block';
+            detail.style.display = isVisible ? 'none' : 'block';
+            toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
           });
 
-     // ❤️ハート
-postDiv.querySelector('.heart-btn').addEventListener('click', ()=>{
-  const id = 'post-'+index;
-  if(hasClicked(id,'heart')){ alert("この投稿にはすでにハートを押しています"); return; }
-  markClicked(id,'heart');
-  const span = postDiv.querySelector('.heart-count');
-  span.textContent = Number(span.textContent)+1;
-  sendAction(index,'heart');
-  updateUserTotals();
-});
+          // ❤️ハート
+          postDiv.querySelector('.heart-btn').addEventListener('click', ()=>{
+            const id = 'post-'+index;
+            if(hasClicked(id,'heart')){ alert("この投稿にはすでにハートを押しています"); return; }
+            markClicked(id,'heart');
+            const span = postDiv.querySelector('.heart-count');
+            span.textContent = Number(span.textContent)+1;
+            sendAction(index,'heart');
+            updateUserTotals();
+          });
 
-// 🚨通報
-postDiv.querySelector('.report-btn').addEventListener('click', ()=>{
-  const id = 'post-'+index;
-  if(hasClicked(id,'report')){ alert("この投稿にはすでに通報済みです"); return; }
-  markClicked(id,'report');
-  const span = postDiv.querySelector('.report-count');
-  span.textContent = Number(span.textContent)+1;
-  sendAction(index,'report');
-  updateUserTotals();
-});
+          // 🚨通報
+          postDiv.querySelector('.report-btn').addEventListener('click', ()=>{
+            const id = 'post-'+index;
+            if(hasClicked(id,'report')){ alert("この投稿にはすでに通報済みです"); return; }
+            markClicked(id,'report');
+            const span = postDiv.querySelector('.report-count');
+            span.textContent = Number(span.textContent)+1;
+            sendAction(index,'report');
+            updateUserTotals();
+          });
 
+          postsContainer.appendChild(postDiv);
+        });
+      })
       .catch(err=>{
-        console.error('CSV読み込みエラー:',err);
+        console.error('CSV読み込みエラー:', err);
         loading.style.display='none';
         error.style.display='block';
       });
