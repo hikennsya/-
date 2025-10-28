@@ -129,12 +129,12 @@
               <span class="post-timestamp">${timestamp}</span>
               <h2>${experimentName}</h2>
             </div>
-            <div class="buttons">
-              <button class="heart-btn">❤️ <span class="heart-count">${heartCount}</span></button>
-              <button class="report-btn">🚨 <span class="report-count">${reportCount}</span></button>
-            </div>
-            <button class="heart-btn" data-tooltip="ハート">❤️ <span class="heart-count">0</span></button>
-<button class="report-btn" data-tooltip="通報">🚨 <span class="report-count">0</span></button>
+     <!-- ユーザー合計表示 -->
+<div class="user-totals" style="margin:16px 0; font-weight:bold;">
+  あなたのハート合計: <span id="user-heart-total">0</span>　
+  あなたの通報合計: <span id="user-report-total">0</span>
+</div>
+
 
             <div class="post-detail" style="display:none;">
               <p>${detailText}</p>
@@ -151,29 +151,28 @@
             toggleBtn.textContent=isVisible?'▼ 詳細を表示':'▲ 閉じる';
           });
 
-          // ❤️ハート（一人一回制限）
-          postDiv.querySelector('.heart-btn').addEventListener('click',()=>{
-            const span=postDiv.querySelector('.heart-count');
-            const id='heart-'+index;
-            if(localStorage.getItem(id)){alert("この投稿にはすでにハートを押しています"); return;}
-            span.textContent=Number(span.textContent)+1;
-            sendAction(index,'heart');
-            localStorage.setItem(id,'1');
-          });
+     // ❤️ハート
+postDiv.querySelector('.heart-btn').addEventListener('click', ()=>{
+  const id = 'post-'+index;
+  if(hasClicked(id,'heart')){ alert("この投稿にはすでにハートを押しています"); return; }
+  markClicked(id,'heart');
+  const span = postDiv.querySelector('.heart-count');
+  span.textContent = Number(span.textContent)+1;
+  sendAction(index,'heart');
+  updateUserTotals();
+});
 
-          // 🚨通報（一人一回制限）
-          postDiv.querySelector('.report-btn').addEventListener('click',()=>{
-            const span=postDiv.querySelector('.report-count');
-            const id='report-'+index;
-            if(localStorage.getItem(id)){alert("この投稿にはすでに通報済みです"); return;}
-            span.textContent=Number(span.textContent)+1;
-            sendAction(index,'report');
-            localStorage.setItem(id,'1');
-          });
+// 🚨通報
+postDiv.querySelector('.report-btn').addEventListener('click', ()=>{
+  const id = 'post-'+index;
+  if(hasClicked(id,'report')){ alert("この投稿にはすでに通報済みです"); return; }
+  markClicked(id,'report');
+  const span = postDiv.querySelector('.report-count');
+  span.textContent = Number(span.textContent)+1;
+  sendAction(index,'report');
+  updateUserTotals();
+});
 
-          postsContainer.appendChild(postDiv);
-        });
-      })
       .catch(err=>{
         console.error('CSV読み込みエラー:',err);
         loading.style.display='none';
