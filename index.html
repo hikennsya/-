@@ -5,81 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>被験者募集掲示板</title>
   <link rel="stylesheet" href="styles.css" />
-
-  <style>
-    /* ✅ ボタンデザイン調整 */
-    .btn-area {
-      margin-top: 8px;
-    }
-
-    .heart-btn,
-    .report-btn {
-      font-size: 14px;
-      padding: 4px 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-right: 6px;
-    }
-
-    .heart-btn {
-      background-color: #ffdee0;
-    }
-
-    .report-btn {
-      background-color: #fff3e0;
-    }
-
-    .heart-btn:hover {
-      background-color: #ffbfc4;
-    }
-
-    .report-btn:hover {
-      background-color: #ffd59b;
-    }
-
-    .heart-count,
-    .report-count {
-      font-size: 12px;
-      margin-left: 4px;
-    }
-
-    .post {
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 15px;
-      background-color: #fafafa;
-    }
-
-    .post h2 {
-      margin: 6px 0;
-    }
-
-    .post-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .toggle-btn {
-      margin-top: 6px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .toggle-btn:hover {
-      background-color: #1748b0;
-    }
-  </style>
 </head>
 
 <body>
+  <!-- ✅ ヘッダー -->
   <header class="site-header">
     <nav class="navbar">
       <h1 class="logo"><a href="index.html">被験者募集掲示板</a></h1>
@@ -92,163 +21,123 @@
     </nav>
   </header>
 
+  <!-- ✅ メインコンテンツ -->
   <main class="container">
+    <section class="intro-section">
+      <h2>このサイトについて</h2>
+      <p>このサイト「被験者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。</p>
+      <p>研究参加の際はポリシーをご確認ください。</p>
+    </section>
+
     <section id="posts" class="post-list">
       <div id="loading" class="loading">投稿を読み込んでいます...</div>
       <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
     </section>
   </main>
 
-  <footer class="footer">© 被験者募集掲示板</footer>
+  <footer class="footer">
+    © 被験者募集掲示板
+  </footer>
 
+  <!-- ✅ JavaScript -->
   <script>
-    const sheetUrl =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwaMGt-e6TBlvvYMY9YWvFT7_aDs-sQ8E4Zy55wxsd87lpNEPRWKaPzaWHgsJkyp6hHUA/exec";
 
     const postsContainer = document.getElementById("posts");
     const loading = document.getElementById("loading");
     const error = document.getElementById("error");
 
-    // ✅ CSVパース関数
     function parseCSV(text) {
-      const rows = [];
-      let current = "";
-      let insideQuote = false;
-      let row = [];
-
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        if (char === '"') {
-          if (text[i + 1] === '"') {
-            current += '"';
-            i++;
-          } else {
-            insideQuote = !insideQuote;
-          }
-        } else if (char === "," && !insideQuote) {
-          row.push(current);
-          current = "";
-        } else if ((char === "\n" || char === "\r") && !insideQuote) {
-          if (current || row.length) {
-            row.push(current);
-            rows.push(row);
-            row = [];
-            current = "";
-          }
-        } else {
-          current += char;
-        }
-      }
-      if (current || row.length) row.push(current);
-      if (row.length) rows.push(row);
-      return rows;
+      const lines = text.trim().split("\n").map(l => l.split(","));
+      return lines.slice(1);
     }
 
-    // ✅ 各投稿のローカル保存キー
-    function getKey(postId, type) {
-      return `post_${postId}_${type}_clicked`;
-    }
-
-    // ✅ データ取得
-    fetch(sheetUrl)
-      .then((res) => {
-        if (!res.ok) throw new Error("ネットワークエラー");
-        return res.text();
-      })
-      .then((csvText) => {
-        loading.style.display = "none";
-        const allRows = parseCSV(csvText);
-        const rows = allRows.slice(1); // ヘッダー除外
+    // 投稿を読み込み
+    fetch(SHEET_CSV_URL)
+      .then(res => res.text())
+      .then(csvText => {
+        const rows = parseCSV(csvText);
+        postsContainer.innerHTML = "";
 
         if (rows.length === 0) {
-          postsContainer.innerHTML =
-            "<p>現在、募集中の実験はありません。</p>";
+          postsContainer.innerHTML = "<p>現在、募集中の実験はありません。</p>";
           return;
         }
 
-        rows.reverse().forEach((cols, index) => {
-          if (cols.length < 3) return;
+        rows.reverse().forEach((cols, i) => {
+          const postId = rows.length - i;
+          const timestamp = cols[0];
+          const title = cols[1];
+          const detail = cols[2]?.replace(/\r?\n/g, "<br>") || "";
 
-          const timestamp = cols[0].trim();
-          const experimentName = cols[1].trim();
-          const detailText = cols[2].trim().replace(/\r?\n/g, "<br>");
-
-          const postId = rows.length - index; // 投稿番号をID代わりに
-          const postDiv = document.createElement("div");
-          postDiv.className = "post card";
-          postDiv.innerHTML = `
+          const post = document.createElement("div");
+          post.className = "post card";
+          post.innerHTML = `
             <div class="post-header">
               <span class="post-number">#${postId}</span>
               <span class="post-timestamp">${timestamp}</span>
+              <h2>${title}</h2>
             </div>
-            <h2>${experimentName}</h2>
             <div class="post-detail" style="display:none;">
-              <p>${detailText}</p>
+              <p>${detail}</p>
             </div>
             <div class="btn-area">
-              <button class="heart-btn" title="いいね">❤️ <span class="heart-count" id="heart-${postId}">0</span></button>
-              <button class="report-btn" title="通報">🚨 <span class="report-count" id="report-${postId}">0</span></button>
+              <button class="heart-btn" title="いいね" data-id="${postId}">❤️ <span class="heart-count">0</span></button>
+              <button class="report-btn" title="通報" data-id="${postId}">🚨 <span class="report-count">0</span></button>
             </div>
             <button class="toggle-btn">▼ 詳細を表示</button>
           `;
+          postsContainer.appendChild(post);
 
-          // ✅ 詳細開閉ボタン
-          const toggleBtn = postDiv.querySelector(".toggle-btn");
-          const detail = postDiv.querySelector(".post-detail");
+          const toggleBtn = post.querySelector(".toggle-btn");
+          const detailEl = post.querySelector(".post-detail");
           toggleBtn.addEventListener("click", () => {
-            const visible = detail.style.display === "block";
-            detail.style.display = visible ? "none" : "block";
-            toggleBtn.textContent = visible ? "▼ 詳細を表示" : "▲ 閉じる";
+            const isVisible = detailEl.style.display === "block";
+            detailEl.style.display = isVisible ? "none" : "block";
+            toggleBtn.textContent = isVisible ? "▼ 詳細を表示" : "▲ 閉じる";
           });
 
-          postsContainer.appendChild(postDiv);
+          const heartBtn = post.querySelector(".heart-btn");
+          const reportBtn = post.querySelector(".report-btn");
+          const heartCount = post.querySelector(".heart-count");
+          const reportCount = post.querySelector(".report-count");
 
-          // ✅ ローカルStorage確認（押したら再押し禁止）
-          const heartBtn = postDiv.querySelector(".heart-btn");
-          const reportBtn = postDiv.querySelector(".report-btn");
+          // ✅ Google Apps Scriptから合計取得
+          fetch(`${GAS_URL}?action=get&id=${postId}`)
+            .then(res => res.json())
+            .then(data => {
+              heartCount.textContent = data.heart || 0;
+              reportCount.textContent = data.report || 0;
+            });
 
-          if (localStorage.getItem(getKey(postId, "heart"))) {
-            heartBtn.disabled = true;
-            heartBtn.style.opacity = 0.6;
-          }
-          if (localStorage.getItem(getKey(postId, "report"))) {
-            reportBtn.disabled = true;
-            reportBtn.style.opacity = 0.6;
-          }
+          // ✅ 1人1回制限
+          if (localStorage.getItem(`heart_${postId}`)) heartBtn.disabled = true;
+          if (localStorage.getItem(`report_${postId}`)) reportBtn.disabled = true;
 
-          // ✅ 合計値（仮）を初期化
-          let heartCount = 0;
-          let reportCount = 0;
-
-          // ✅ ボタン押下時の処理
-          heartBtn.addEventListener("click", () => {
-            if (!localStorage.getItem(getKey(postId, "heart"))) {
-              heartCount++;
-              document.getElementById(`heart-${postId}`).textContent =
-                heartCount;
-              localStorage.setItem(getKey(postId, "heart"), "true");
-              heartBtn.disabled = true;
-              heartBtn.style.opacity = 0.6;
-            }
-          });
-
-          reportBtn.addEventListener("click", () => {
-            if (!localStorage.getItem(getKey(postId, "report"))) {
-              reportCount++;
-              document.getElementById(`report-${postId}`).textContent =
-                reportCount;
-              localStorage.setItem(getKey(postId, "report"), "true");
-              reportBtn.disabled = true;
-              reportBtn.style.opacity = 0.6;
-            }
-          });
+          // ✅ クリック時
+          heartBtn.addEventListener("click", () => handleClick(postId, "heart", heartBtn, heartCount));
+          reportBtn.addEventListener("click", () => handleClick(postId, "report", reportBtn, reportCount));
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.error("CSV読み込みエラー:", err);
         loading.style.display = "none";
         error.style.display = "block";
       });
+
+    // ✅ ボタンクリック処理
+    function handleClick(id, type, button, countSpan) {
+      if (localStorage.getItem(`${type}_${id}`)) return;
+      button.disabled = true;
+      localStorage.setItem(`${type}_${id}`, "true");
+
+      let current = parseInt(countSpan.textContent) || 0;
+      countSpan.textContent = current + 1;
+
+      fetch(`${GAS_URL}?action=update&id=${id}&type=${type}`, { method: "POST" })
+        .catch(err => console.error("送信エラー:", err));
+    }
   </script>
 </body>
 </html>
