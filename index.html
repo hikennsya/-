@@ -1,85 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <meta name="google-site-verification" content="61fo7jboEh_yjqDy9wookQE0lFghsk4CQnk5VNTj1m0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="61fo7jboEh_yjqDy9wookQE0lFghsk4CQnk5VNTj1m0" />
   <title>被験者募集掲示板</title>
   <link rel="stylesheet" href="styles.css" />
-
-  <style>
-    /* ✅ ボタンデザイン調整 */
-    .btn-area {
-      margin-top: 8px;
-    }
-
-    .heart-btn,
-    .report-btn {
-      font-size: 14px;
-      padding: 4px 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-right: 6px;
-    }
-
-    .heart-btn {
-      background-color: #ffdee0;
-    }
-
-    .report-btn {
-      background-color: #fff3e0;
-    }
-
-    .heart-btn:hover {
-      background-color: #ffbfc4;
-    }
-
-    .report-btn:hover {
-      background-color: #ffd59b;
-    }
-
-    .heart-count,
-    .report-count {
-      font-size: 12px;
-      margin-left: 4px;
-    }
-
-    .post {
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 15px;
-      background-color: #fafafa;
-    }
-
-    .post h2 {
-      margin: 6px 0;
-    }
-
-    .post-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .toggle-btn {
-      margin-top: 6px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .toggle-btn:hover {
-      background-color: #1748b0;
-    }
-  </style>
 </head>
 
 <body>
+  <!-- ✅ ヘッダー（共通） -->
   <header class="site-header">
     <nav class="navbar">
       <h1 class="logo"><a href="index.html">被験者募集掲示板</a></h1>
@@ -89,30 +20,64 @@
         <li><a href="recruit.html">掲載</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
       </ul>
+      
+      <script>
+  // 現在のページファイル名を取得（例: "policy.html"）
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // すべてのナビゲーションリンクを取得
+  const navLinks = document.querySelectorAll(".nav-links a");
+
+  navLinks.forEach(link => {
+    // 各リンクのhrefを比較
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active"); // 一致したリンクにactiveを付与
+    }
+  });
+</script>
+
     </nav>
   </header>
 
+  <!-- ✅ メイン -->
   <main class="container">
+    
+      <!-- ✅ サイト説明文（投稿の上に追加） -->
+  <section class="intro-section">
+    <h2>このサイトについて</h2>
+    <p>
+      このサイト「被験者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。<br>
+      研究参加の際はポリシーをご確認ください。
+    </p>
+    <p class="official-links">
+  <a href="https://x.com/hikennsya_keiji" target="_blank">X(旧Twitter)</a> ｜ 
+  <a href="https://www.threads.net/@hikennsya_keijiban" target="_blank">Threads</a>
+</p>
+  </section>
+    
     <section id="posts" class="post-list">
       <div id="loading" class="loading">投稿を読み込んでいます...</div>
       <div id="error" class="error" style="display:none;">投稿データを読み込めませんでした。</div>
     </section>
   </main>
 
-  <footer class="footer">© 被験者募集掲示板</footer>
-
+ 
+  <footer class="footer">
+    © 被験者募集掲示板
+  </footer>
+  
+  <!-- ✅ Googleスプレッドシート連携 -->
   <script>
-    const sheetUrl =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv";
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
 
-    const postsContainer = document.getElementById("posts");
-    const loading = document.getElementById("loading");
-    const error = document.getElementById("error");
+    const postsContainer = document.getElementById('posts');
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
 
-    // ✅ CSVパース関数
+    // ✅ カンマ・改行対応CSVパーサー
     function parseCSV(text) {
       const rows = [];
-      let current = "";
+      let current = '';
       let insideQuote = false;
       let row = [];
 
@@ -125,15 +90,15 @@
           } else {
             insideQuote = !insideQuote;
           }
-        } else if (char === "," && !insideQuote) {
+        } else if (char === ',' && !insideQuote) {
           row.push(current);
-          current = "";
-        } else if ((char === "\n" || char === "\r") && !insideQuote) {
+          current = '';
+        } else if ((char === '\n' || char === '\r') && !insideQuote) {
           if (current || row.length) {
             row.push(current);
             rows.push(row);
             row = [];
-            current = "";
+            current = '';
           }
         } else {
           current += char;
@@ -144,110 +109,59 @@
       return rows;
     }
 
-    // ✅ 各投稿のローカル保存キー
-    function getKey(postId, type) {
-      return `post_${postId}_${type}_clicked`;
-    }
-
     // ✅ データ取得
     fetch(sheetUrl)
-      .then((res) => {
-        if (!res.ok) throw new Error("ネットワークエラー");
+      .then(res => {
+        if (!res.ok) throw new Error('ネットワークエラー');
         return res.text();
       })
-      .then((csvText) => {
-        loading.style.display = "none";
+      .then(csvText => {
+        loading.style.display = 'none';
         const allRows = parseCSV(csvText);
         const rows = allRows.slice(1); // ヘッダー除外
 
         if (rows.length === 0) {
-          postsContainer.innerHTML =
-            "<p>現在、募集中の実験はありません。</p>";
+          postsContainer.innerHTML = '<p>現在、募集中の実験はありません。</p>';
           return;
         }
+       rows.reverse().forEach((cols, index) => {
+  if (cols.length < 3) return; // タイムスタンプ・実験名・詳細が必要
 
-        rows.reverse().forEach((cols, index) => {
-          if (cols.length < 3) return;
+  const timestamp = cols[0].trim();     // A列（タイムスタンプ）
+  const experimentName = cols[1].trim(); // B列（実験名）←C列が1つ前に詰まった
+  const detailText = cols[2].trim().replace(/\r?\n/g, '<br>'); // C列（詳細）
 
-          const timestamp = cols[0].trim();
-          const experimentName = cols[1].trim();
-          const detailText = cols[2].trim().replace(/\r?\n/g, "<br>");
+  const postDiv = document.createElement('div');
+  postDiv.className = 'post card';
+  postDiv.innerHTML = `
+    <div class="post-header">
+      <span class="post-number">#${rows.length - index}</span>
+      <span class="post-timestamp">${timestamp}</span>
+      <h2>${experimentName}</h2>
+    </div>
+    <div class="post-detail" style="display:none;">
+      <p>${detailText}</p>
+    </div>
+    <button class="toggle-btn">▼ 詳細を表示</button>
+  `;
 
-          const postId = rows.length - index; // 投稿番号をID代わりに
-          const postDiv = document.createElement("div");
-          postDiv.className = "post card";
-          postDiv.innerHTML = `
-            <div class="post-header">
-              <span class="post-number">#${postId}</span>
-              <span class="post-timestamp">${timestamp}</span>
-            </div>
-            <h2>${experimentName}</h2>
-            <div class="post-detail" style="display:none;">
-              <p>${detailText}</p>
-            </div>
-            <div class="btn-area">
-              <button class="heart-btn" title="いいね">❤️ <span class="heart-count" id="heart-${postId}">0</span></button>
-              <button class="report-btn" title="通報">🚨 <span class="report-count" id="report-${postId}">0</span></button>
-            </div>
-            <button class="toggle-btn">▼ 詳細を表示</button>
-          `;
+  // ✅ 詳細開閉
+  const toggleBtn = postDiv.querySelector('.toggle-btn');
+  const detail = postDiv.querySelector('.post-detail');
+  toggleBtn.addEventListener('click', () => {
+    const isVisible = detail.style.display === 'block';
+    detail.style.display = isVisible ? 'none' : 'block';
+    toggleBtn.textContent = isVisible ? '▼ 詳細を表示' : '▲ 閉じる';
+  });
 
-          // ✅ 詳細開閉ボタン
-          const toggleBtn = postDiv.querySelector(".toggle-btn");
-          const detail = postDiv.querySelector(".post-detail");
-          toggleBtn.addEventListener("click", () => {
-            const visible = detail.style.display === "block";
-            detail.style.display = visible ? "none" : "block";
-            toggleBtn.textContent = visible ? "▼ 詳細を表示" : "▲ 閉じる";
-          });
+  postsContainer.appendChild(postDiv);
+});
 
-          postsContainer.appendChild(postDiv);
-
-          // ✅ ローカルStorage確認（押したら再押し禁止）
-          const heartBtn = postDiv.querySelector(".heart-btn");
-          const reportBtn = postDiv.querySelector(".report-btn");
-
-          if (localStorage.getItem(getKey(postId, "heart"))) {
-            heartBtn.disabled = true;
-            heartBtn.style.opacity = 0.6;
-          }
-          if (localStorage.getItem(getKey(postId, "report"))) {
-            reportBtn.disabled = true;
-            reportBtn.style.opacity = 0.6;
-          }
-
-          // ✅ 合計値（仮）を初期化
-          let heartCount = 0;
-          let reportCount = 0;
-
-          // ✅ ボタン押下時の処理
-          heartBtn.addEventListener("click", () => {
-            if (!localStorage.getItem(getKey(postId, "heart"))) {
-              heartCount++;
-              document.getElementById(`heart-${postId}`).textContent =
-                heartCount;
-              localStorage.setItem(getKey(postId, "heart"), "true");
-              heartBtn.disabled = true;
-              heartBtn.style.opacity = 0.6;
-            }
-          });
-
-          reportBtn.addEventListener("click", () => {
-            if (!localStorage.getItem(getKey(postId, "report"))) {
-              reportCount++;
-              document.getElementById(`report-${postId}`).textContent =
-                reportCount;
-              localStorage.setItem(getKey(postId, "report"), "true");
-              reportBtn.disabled = true;
-              reportBtn.style.opacity = 0.6;
-            }
-          });
-        });
       })
-      .catch((err) => {
-        console.error("CSV読み込みエラー:", err);
-        loading.style.display = "none";
-        error.style.display = "block";
+      .catch(err => {
+        console.error('CSV読み込みエラー:', err);
+        loading.style.display = 'none';
+        error.style.display = 'block';
       });
   </script>
 </body>
