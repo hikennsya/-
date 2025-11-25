@@ -374,12 +374,12 @@ function renderRecruit() {
     return `
     <div class="max-w-3xl mx-auto space-y-6">
         <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg">
-            <h2 class="text-2xl font-bold mb-4">実験協力者を募集しませんか？</h2>
+            <h2 class="text-2xl font-bold mb-4">実験被験者を募集しませんか？</h2>
             <p class="opacity-90 mb-6">研究・実験の被験者募集を無料で掲載できます。</p>
             <a href="${RECRUIT_FORM_URL}" target="_blank" 
                class="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-md hover:bg-gray-100 transition-transform hover:-translate-y-1">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
-                掲載依頼フォームへ
+                掲載フォームへ
             </a>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
