@@ -261,13 +261,22 @@ function toggleDetails(trigger) {
     const detail = trigger.nextElementSibling;
     const icon = trigger.querySelector('.chevron-icon');
     
-    detail.classList.toggle('open');
-    
-    const isOpen = detail.classList.contains('open');
-    if (icon) {
-        icon.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
-        lucide.createIcons();
+    // Calculate the height to slide smoothly
+    if (detail.style.maxHeight) {
+        // Close
+        detail.style.maxHeight = null;
+        if (icon) {
+            icon.setAttribute('data-lucide', 'chevron-down');
+        }
+    } else {
+        // Open (set to scrollHeight)
+        detail.style.maxHeight = detail.scrollHeight + "px";
+        if (icon) {
+            icon.setAttribute('data-lucide', 'chevron-up');
+        }
     }
+    
+    lucide.createIcons();
 }
 
 function createPostCard(post, displayIndex) {
@@ -371,27 +380,11 @@ function renderContact() {
             <h1 class="text-2xl font-bold text-gray-900">お問い合わせ</h1>
         </div>
         <div class="text-gray-700">
-            <p class="mb-6">当サイトに関するご意見・ご質問は、以下のフォームまたはSNSのDMにてご連絡ください。</p>
+            <p class="mb-6">当サイトに関するご意見・ご質問は、以下のフォームよりご連絡ください。</p>
             
             <div class="text-center mb-10">
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSexVAhliA-a_VG2fiyEZZUGmuBVKxXgtmdIdciqKai-Ki0ssg/viewform?usp=dialog" target="_blank" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-all hover:-translate-y-1">
                     <i data-lucide="send" class="w-5 h-5"></i> お問い合わせフォーム
-                </a>
-            </div>
-
-            <h3 class="font-bold text-gray-900 mb-4 text-center">SNS DMでも受付中</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a href="https://x.com/hikennsya_keiji" target="_blank" class="flex items-center justify-center p-6 border border-gray-200 rounded-xl hover:border-black hover:bg-gray-50 transition-all group">
-                    <div class="text-center">
-                        <span class="block font-bold text-lg mb-1 group-hover:text-black">X (Twitter)</span>
-                        <span class="text-sm text-gray-500">@hikennsya_keiji</span>
-                    </div>
-                </a>
-                 <a href="https://www.threads.net/@hikennsya_keijiban" target="_blank" class="flex items-center justify-center p-6 border border-gray-200 rounded-xl hover:border-black hover:bg-gray-50 transition-all group">
-                    <div class="text-center">
-                        <span class="block font-bold text-lg mb-1 group-hover:text-black">Threads</span>
-                        <span class="text-sm text-gray-500">@hikennsya_keijiban</span>
-                    </div>
                 </a>
             </div>
         </div>
