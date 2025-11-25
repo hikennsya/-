@@ -13,7 +13,7 @@ let sortOrder = 'newest';
 const routes = {
     '': { label: 'ホーム', icon: 'home', render: renderHome },
     '#policy': { label: '利用ポリシー', icon: 'shield-check', render: renderPolicy },
-    '#recruit': { label: '掲載依頼', icon: 'pen-tool', render: renderRecruit },
+    '#recruit': { label: '掲載', icon: 'pen-tool', render: renderRecruit },
     '#contact': { label: 'お問い合わせ', icon: 'mail', render: renderContact },
 };
 
