@@ -121,10 +121,15 @@ function updateActiveNav(currentHash) {
         }
     });
 
-    // ページ遷移時にスマホメニューを閉じる
+    // 【✅ 修正・追加箇所: リンククリック時にメニューを閉じる】
+    // ページ遷移（ハッシュ変更）が発生したら、モバイルメニューを強制的に非表示にする
     els.mobileNav.classList.add('hidden');
+    
+    // アイコンも「メニュー」に戻す
+    const iconContainer = els.mobileMenuBtn.querySelector('i');
+    iconContainer.setAttribute('data-lucide', 'menu');
+    lucide.createIcons();
 }
-
 // --- ルーティング処理 (変更なし) ---
 function handleRoute() {
     const hash = window.location.hash;
