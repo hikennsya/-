@@ -302,7 +302,7 @@ function createPostCard(post, displayIndex) {
                 ${post.title}
             </h3>
 
-            <!-- Chevron Icon -->
+            <!-- Chevron Icon (Down = Closed by default) -->
             <div class="absolute top-5 right-5 text-gray-400 group-hover:text-accent transition-colors">
                  <i data-lucide="chevron-down" class="chevron-icon w-6 h-6"></i>
             </div>
