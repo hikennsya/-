@@ -52,7 +52,7 @@ const els = {
 document.addEventListener('DOMContentLoaded', () => {
     els.year.textContent = new Date().getFullYear();
     setupNavigation();
-    
+
     // 初回ロード
     fetchData().then(() => {
         handleRoute();
@@ -89,17 +89,17 @@ function setupNavigation() {
     els.mobileMenuBtn.addEventListener('click', () => {
         // 1. メニューの表示/非表示を切り替える
         els.mobileNav.classList.toggle('hidden');
-        
+
         // 2. アイコンを切り替える (メニュー <-> X)
         const iconContainer = els.mobileMenuBtn.querySelector('i');
-        
+
         // LucideアイコンをHTML属性で切り替える
         if (els.mobileNav.classList.contains('hidden')) {
             iconContainer.setAttribute('data-lucide', 'menu'); // 閉じた状態
         } else {
             iconContainer.setAttribute('data-lucide', 'x'); // 開いた状態
         }
-        
+
         // 3. Lucideライブラリに切り替えたアイコンを再描画させる
         lucide.createIcons();
     });
@@ -109,7 +109,7 @@ function setupNavigation() {
 
 function updateActiveNav(currentHash) {
     const normalizedHash = currentHash || '';
-    
+
     document.querySelectorAll('.nav-item').forEach(link => {
         const isMatch = link.dataset.hash === normalizedHash;
         if (isMatch) {
@@ -121,6 +121,7 @@ function updateActiveNav(currentHash) {
         }
     });
 
+    // ページ遷移時にスマホメニューを閉じる
     // 【✅ 修正・追加箇所: リンククリック時にメニューを閉じる】
     // ページ遷移（ハッシュ変更）が発生したら、モバイルメニューを強制的に非表示にする
     els.mobileNav.classList.add('hidden');
@@ -130,19 +131,20 @@ function updateActiveNav(currentHash) {
     iconContainer.setAttribute('data-lucide', 'menu');
     lucide.createIcons();
 }
+
 // --- ルーティング処理 (変更なし) ---
 function handleRoute() {
     const hash = window.location.hash;
     const route = routes[hash] || routes['']; // デフォルトはホーム
 
     updateActiveNav(hash);
-    
+
     // コンテンツ描画
     els.main.innerHTML = route.render();
-    
+
     // アイコン再生成
     lucide.createIcons();
-    
+
     // ページトップへ
     window.scrollTo(0, 0);
 
@@ -172,7 +174,7 @@ async function fetchData() {
 function parseCSV(text) {
     const rows = [];
     let currentRow = [], currentVal = '', insideQuote = false;
-    
+
     for (let i = 0; i < text.length; i++) {
         const char = text[i], nextChar = text[i+1];
         if (char === '"') {
@@ -216,7 +218,7 @@ function renderHome() {
     const cardsHtml = sorted.map((post, idx) => {
         // 表示番号
         const displayNum = sortOrder === 'newest' ? sorted.length - idx : idx + 1;
-        
+
         return `
         <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 group">
             <div class="post-trigger p-6 cursor-pointer select-none">
@@ -292,7 +294,7 @@ function attachHomeEvents() {
             const detail = trigger.nextElementSibling;
             const icon = trigger.querySelector('.chevron-icon');
             const label = trigger.querySelector('.toggle-label');
-            
+
             if (detail.style.maxHeight) {
                 // 閉じる
                 detail.style.maxHeight = null;
