@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="61fo7jboEh_yjqDy9wookQE0lFghsk4CQnk5VNTj1m0" />
     <title>被験者募集掲示板｜大学研究・心理学実験への参加募集</title>
     <meta name="description" content="大学などの研究・実験への参加者を募集する掲示板です。心理学実験、行動科学、認知研究などの被験者募集情報を掲載しています。" />
-    <meta property="og:title" content="被験者募集掲示板｜研究・実験参加者募集サイト" />
-    <meta property="og:description" content="大学研究や心理学実験の被験者を募集しています。研究参加前にポリシーをご確認ください。" />
+    
+    <!-- OGP -->
+    <meta property="og:title" content="被験者募集掲示板" />
+    <meta property="og:description" content="大学研究や心理学実験の被験者を募集しています。" />
     <meta property="og:type" content="website" />
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              primary: '#0f172a', // Slate 900
-              secondary: '#334155', // Slate 700
-              accent: '#2563eb', // Blue 600
+              primary: '#0f172a',
+              secondary: '#334155',
+              accent: '#2563eb',
             },
             fontFamily: {
               sans: ['"Helvetica Neue"', 'Arial', '"Hiragino Kaku Gothic ProN"', '"Hiragino Sans"', 'Meiryo', 'sans-serif'],
@@ -26,22 +30,72 @@
         }
       }
     </script>
-
-<link rel="stylesheet" href="/index.css">
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6"
-  }
-}
-</script>
-  <script type="module" crossorigin src="/assets/index-CidLCwZ-.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-  <body class="bg-gray-50 text-gray-800 antialiased selection:bg-blue-100 selection:text-blue-900">
-    <div id="root"></div>
-  </body>
+<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="bg-primary p-1.5 rounded-lg group-hover:bg-accent transition-colors">
+                        <i data-lucide="graduation-cap" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <span class="font-bold text-lg md:text-xl text-primary tracking-tight">被験者募集掲示板</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-1" id="desktop-nav">
+                    <!-- Links injected by JS -->
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="p-2 rounded-md text-gray-500 hover:bg-gray-100">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div id="mobile-nav" class="hidden md:hidden border-t border-gray-100 bg-white absolute w-full shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1" id="mobile-nav-links">
+                <!-- Links injected by JS -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+        <!-- Content injected by JS -->
+        <div id="loading" class="flex flex-col items-center justify-center py-20 text-gray-400">
+            <i data-lucide="loader-2" class="w-10 h-10 animate-spin mb-4 text-accent"></i>
+            <p>読み込み中...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-sm text-gray-500">© <span id="year"></span> 被験者募集掲示板. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://x.com/hikennsya_keiji" target="_blank" class="text-gray-400 hover:text-gray-900 text-sm font-medium">X (Twitter)</a>
+                    <a href="https://www.threads.net/@hikennsya_keijiban" target="_blank" class="text-gray-400 hover:text-gray-900 text-sm font-medium">Threads</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main Script -->
+    <script src="script.js"></script>
+</body>
 </html>
