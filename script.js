@@ -397,7 +397,7 @@ function renderRecruit() {
                 <hr>
                 <section>
                     <h4 class="font-bold text-blue-800 mb-2 text-base flex items-center gap-2">
-                        <i data-lucide="shield-check" class="w-4 h-4"></i>予防・注意事項
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>注意事項
                     </h4>
                     <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
                         <li>掲載料金などは一切かかりません。</li>
