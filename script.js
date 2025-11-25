@@ -259,7 +259,7 @@ ${post.details}
                 <span class="text-sm font-bold text-gray-500">${sorted.length}件の募集</span>
                 <select id="sort-select" class="text-sm border-gray-300 rounded-lg shadow-sm focus:border-accent focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-1.5">
                     <option value="newest" ${sortOrder==='newest'?'selected':''}>新着順</option>
-                    <option value="oldest" ${sortOrder==='oldest'?'selected':''}>投稿順</option>
+                    <option value="oldest" ${sortOrder==='oldest'?'selected':''}>古い順</option>
                 </select>
             </div>
 
