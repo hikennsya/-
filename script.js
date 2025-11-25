@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', handleRoute);
 });
 
-// --- ナビゲーション生成 (変更なし) ---
 function setupNavigation() {
     const navItems = Object.entries(routes).map(([hash, route]) => ({ hash, ...route }));
 
@@ -86,18 +85,22 @@ function setupNavigation() {
         </a>
     `).join('');
 
-    // スマホメニュー開閉
-   els.mobileMenuBtn.addEventListener('click', () => {
-        // hidden クラスをトグル（付けたり外したり）することで表示・非表示を切り替えます
+    // 【✅ 修正箇所: スマホメニュー開閉のロジック】
+    els.mobileMenuBtn.addEventListener('click', () => {
+        // 1. メニューの表示/非表示を切り替える
         els.mobileNav.classList.toggle('hidden');
         
-        // オプショナル: メニューが開いたときにアイコンを「X」に変える処理 (Lucide Iconを使用)
-        const iconElement = els.mobileMenuBtn.querySelector('i');
-        if (iconElement.dataset.lucide === 'menu') {
-            iconElement.dataset.lucide = 'x';
+        // 2. アイコンを切り替える (メニュー <-> X)
+        const iconContainer = els.mobileMenuBtn.querySelector('i');
+        
+        // LucideアイコンをHTML属性で切り替える
+        if (els.mobileNav.classList.contains('hidden')) {
+            iconContainer.setAttribute('data-lucide', 'menu'); // 閉じた状態
         } else {
-            iconElement.dataset.lucide = 'menu';
+            iconContainer.setAttribute('data-lucide', 'x'); // 開いた状態
         }
+        
+        // 3. Lucideライブラリに切り替えたアイコンを再描画させる
         lucide.createIcons();
     });
 
