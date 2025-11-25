@@ -4,8 +4,11 @@
 // GoogleスプレッドシートのCSV URL
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
 
-// 掲載依頼用のGoogleフォームURL（ダミーです。実際のものに置き換えてください）
-const RECRUIT_FORM_URL = 'https://forms.google.com/'; 
+// 【更新されたお問い合わせフォームURL】
+const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSexVAhliA-a_VG2fiyEZZUGmuBVKxXgtmdIdciqKai-Ki0ssg/viewform?usp=dialog'; 
+
+// 【更新された掲載依頼フォームURL】
+const RECRUIT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe9ct1JVa42u4tWHIqFQJegyq1s2b2rjiSpc84EBqq65QkLug/viewform'; 
 
 // --- ステート管理 ---
 let allPosts = [];
@@ -59,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', handleRoute);
 });
 
-// --- ナビゲーション生成 ---
+// --- ナビゲーション生成 (変更なし) ---
 function setupNavigation() {
     const navItems = Object.entries(routes).map(([hash, route]) => ({ hash, ...route }));
 
@@ -109,7 +112,7 @@ function updateActiveNav(currentHash) {
     els.mobileNav.classList.add('hidden');
 }
 
-// --- ルーティング処理 ---
+// --- ルーティング処理 (変更なし) ---
 function handleRoute() {
     const hash = window.location.hash;
     const route = routes[hash] || routes['']; // デフォルトはホーム
@@ -131,7 +134,7 @@ function handleRoute() {
     }
 }
 
-// --- データ取得 ---
+// --- データ取得 (変更なし) ---
 async function fetchData() {
     try {
         const res = await fetch(SHEET_URL);
@@ -147,7 +150,7 @@ async function fetchData() {
     }
 }
 
-// --- CSVパーサー ---
+// --- CSVパーサー (変更なし) ---
 function parseCSV(text) {
     const rows = [];
     let currentRow = [], currentVal = '', insideQuote = false;
@@ -184,7 +187,7 @@ function parseCSV(text) {
 // ページレンダリング関数群
 // ==========================================
 
-// 1. ホーム画面
+// 1. ホーム画面 (変更なし)
 function renderHome() {
     if (!allPosts.length) return `<div class="text-center py-10 text-gray-500">募集中または読み込み中です...</div>`;
 
@@ -254,7 +257,7 @@ ${post.details}
     `;
 }
 
-// ホーム画面用イベント設定
+// ホーム画面用イベント設定 (変更なし)
 function attachHomeEvents() {
     // ソート変更
     const select = document.getElementById('sort-select');
@@ -287,45 +290,77 @@ function attachHomeEvents() {
     });
 }
 
-// 2. 利用ポリシー画面
+// 2. 利用ポリシー画面 【更新】
 function renderPolicy() {
     return `
     <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <div class="text-center mb-8">
             <h2 class="text-2xl font-bold text-primary mb-2">利用ポリシー</h2>
-            <p class="text-gray-500 text-sm">安全に研究に参加していただくためのガイドライン</p>
+            <p class="text-gray-500 text-sm">最終更新日: 2025年11月23日</p>
         </div>
 
         <div class="space-y-8">
+            
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
-                    <i data-lucide="check-circle" class="w-5 h-5 text-accent"></i>
+                    <i data-lucide="info" class="w-5 h-5 text-accent"></i>
                     サイトの目的
                 </h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    当サイトは、大学および研究機関における学術研究（心理学実験、行動観察、アンケート調査など）の被験者募集情報を集約し、研究者と協力者を繋ぐことを目的としています。
+                    このサイト「被験者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。以下の方針に従い、利用者の皆さまが安心してご利用いただける環境を提供いたします。
+                </p>
+            </section>
+            
+            <section>
+                <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
+                    <i data-lucide="lock" class="w-5 h-5 text-accent"></i>
+                    個人情報の取り扱い
+                </h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    応募フォームなどで提供いただいた情報は、募集に関するサイト運営のためのみに使用し、第三者への提供は一切行いません。
                 </p>
             </section>
 
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
-                    <i data-lucide="alert-triangle" class="w-5 h-5 text-accent"></i>
-                    免責事項
+                    <i data-lucide="package" class="w-5 h-5 text-accent"></i>
+                    投稿内容について
                 </h3>
                 <ul class="list-disc list-inside text-gray-600 text-sm leading-relaxed space-y-2">
-                    <li>当サイトは情報の掲載の場を提供するのみであり、実験内容や謝礼の授受に関するトラブルについて一切の責任を負いません。</li>
-                    <li>参加申し込みは、各募集の担当者と直接連絡を取って行ってください。</li>
-                    <li>掲載内容は投稿者の責任において公開されています。</li>
+                    <li>掲載される募集情報は、研究機関・大学・実験担当者によって提供された内容に基づいています。</li>
+                    <li>サイト運営者は、投稿内容の正確性について保証いたしません。</li>
                 </ul>
             </section>
 
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
-                    <i data-lucide="shield" class="w-5 h-5 text-accent"></i>
-                    個人情報の取り扱い
+                    <i data-lucide="gavel" class="w-5 h-5 text-red-500"></i>
+                    禁止されているもの
+                </h3>
+                <ul class="list-disc list-inside text-gray-600 text-sm leading-relaxed space-y-2">
+                    <li>虚偽または誤解を招く情報の掲載</li>
+                    <li>他者への誹謗中傷、差別的表現</li>
+                    <li>営利・勧誘・広告目的の投稿</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
+                    免責事項
                 </h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    当サイト自体は閲覧者の個人情報を取得・保存しません。実験参加の際に研究者に提供する個人情報（氏名、連絡先など）は、各研究機関の倫理規定に基づき管理されます。
+                    当サイトの利用により生じた損害やトラブルについて、運営者は一切の責任を負いません。利用者ご自身の責任において情報をご利用ください。
+                </p>
+            </section>
+
+            <section>
+                <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
+                    <i data-lucide="repeat-2" class="w-5 h-5 text-accent"></i>
+                    ポリシーの変更
+                </h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    本ポリシーの内容は、必要に応じて予告なく変更される場合があります。最新の内容は本ページにてご確認ください。
                 </p>
             </section>
         </div>
@@ -339,55 +374,60 @@ function renderPolicy() {
     `;
 }
 
-// 3. 掲載依頼画面
+// 3. 掲載依頼画面 【更新】
 function renderRecruit() {
     return `
     <div class="max-w-3xl mx-auto space-y-6">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white text-center shadow-lg">
-            <h2 class="text-2xl font-bold mb-4">研究参加者を募集しませんか？</h2>
-            <p class="opacity-90 mb-6">大学・研究機関所属の方であれば、どなたでも無料で掲載可能です。</p>
+        <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">実験協力者を募集しませんか？</h2>
+            <p class="opacity-90 mb-6">研究・実験の被験者募集を無料で掲載できます。</p>
             <a href="${RECRUIT_FORM_URL}" target="_blank" 
                class="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-md hover:bg-gray-100 transition-transform hover:-translate-y-1">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
-                掲載依頼フォームへ（Google Form）
+                掲載依頼フォームへ
             </a>
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-            <h3 class="text-lg font-bold text-primary mb-4">掲載条件</h3>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h4 class="font-bold text-accent mb-2 text-sm">✅ 掲載できるもの</h4>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>大学・公的研究機関の研究</li>
-                        <li>倫理審査の承認を得ているもの</li>
-                        <li>無償または謝礼ありの実験</li>
-                    </ul>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h4 class="font-bold text-red-500 mb-2 text-sm">❌ 掲載できないもの</h4>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>営利目的のモニター募集</li>
-                        <li>治験（医薬品の臨床試験）</li>
-                        <li>所属が不明確な個人の調査</li>
-                    </ul>
-                </div>
-            </div>
+            <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b">掲載内容に関する規定</h3>
             
-            <div class="mt-6 pt-6 border-t border-gray-100">
-                <h3 class="text-lg font-bold text-primary mb-2">掲載の流れ</h3>
-                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2">
-                    <li>上記ボタンのGoogleフォームより、実験名・日時・詳細を入力してください。</li>
-                    <li>管理人が内容を確認し（通常24時間以内）、問題なければスプレッドシートに反映されます。</li>
-                    <li>募集が終了した場合は、お問い合わせフォームより削除依頼を出してください。</li>
-                </ol>
+            <div class="space-y-5">
+                <section>
+                    <h4 class="font-bold text-accent mb-2 text-base flex items-center gap-2">
+                        <i data-lucide="package" class="w-4 h-4"></i>掲載可能な内容
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
+                        <li>実験の被験者を**無料**で募集することが可能です。</li>
+                        <li>各研究室の参加者募集のリンク（Sonaシステム、ホームページなど）も掲載可能です。</li>
+                    </ul>
+                </section>
+                
+                <hr>
+
+                <section>
+                    <h4 class="font-bold text-blue-800 mb-2 text-base flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>予防・注意事項
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
+                        <li>掲載料金などは一切かかりません。</li>
+                        <li>実験・調査内容に**虚偽を含まない**こと。</li>
+                        <li>**謝礼の有無は必ず明記**してください。また謝礼がアマゾンギフト券など**現金以外の場合も明記**してください。</li>
+                    </ul>
+                </section>
+
+                <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
+                    <p class="font-bold flex items-center gap-2 mb-1">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>免責事項
+                    </p>
+                    当サイトを通じて行われる参加者募集に関連して生じたいかなる問題についても、当サイトは一切の責任を負いません。あらかじめご承知おきください。
+                </div>
             </div>
         </div>
     </div>
     `;
 }
 
-// 4. お問い合わせ画面
+// 4. お問い合わせ画面 【更新】
 function renderContact() {
     return `
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
@@ -396,24 +436,16 @@ function renderContact() {
         </div>
         
         <h2 class="text-2xl font-bold text-primary mb-4">お問い合わせ</h2>
-        <p class="text-gray-600 mb-8">
-            掲載情報の修正・削除依頼、その他サイトに関するお問い合わせは<br>
-            以下のSNSのDM（ダイレクトメッセージ）にて受け付けています。
+        <p class="text-gray-600 mb-6">
+            ご質問・ご相談（掲載内容の修正・削除依頼など）がありましたら、<br>
+            以下のフォームからご連絡ください。
         </p>
         
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="https://x.com/hikennsya_keiji" target="_blank" 
-               class="flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                X (Twitter)で連絡
-            </a>
-            
-            <a href="https://www.threads.net/@hikennsya_keijiban" target="_blank"
-               class="flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-black border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors">
-                <span class="font-bold">@</span>
-                Threadsで連絡
-            </a>
-        </div>
+        <a href="${CONTACT_FORM_URL}" target="_blank"
+           class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-white rounded-lg font-bold shadow-md hover:bg-blue-700 transition-transform hover:-translate-y-0.5">
+            <i data-lucide="send" class="w-5 h-5"></i>
+            お問い合わせフォームへ
+        </a>
 
         <p class="text-xs text-gray-400 mt-8">
             ※研究内容自体に関する質問は、各募集の担当者へ直接お問い合わせください。
@@ -421,3 +453,14 @@ function renderContact() {
     </div>
     `;
 }
+
+// DOM読み込み完了時に実行
+document.addEventListener('DOMContentLoaded', () => {
+    // 既存のinit()処理を実行
+    els.year.textContent = new Date().getFullYear();
+    setupNavigation();
+    fetchData().then(() => {
+        handleRoute();
+    });
+    window.addEventListener('hashchange', handleRoute);
+});
