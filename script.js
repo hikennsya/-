@@ -1,41 +1,20 @@
 // script.js
 
 // --- 設定 ---
-// GoogleスプレッドシートのCSV URL
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
-
-// 【更新されたお問い合わせフォームURL】
 const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSexVAhliA-a_VG2fiyEZZUGmuBVKxXgtmdIdciqKai-Ki0ssg/viewform?usp=dialog'; 
-
-// 【更新された掲載依頼フォームURL】
 const RECRUIT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe9ct1JVa42u4tWHIqFQJegyq1s2b2rjiSpc84EBqq65QkLug/viewform'; 
 
 // --- ステート管理 ---
 let allPosts = [];
-let sortOrder = 'newest'; // 'newest' | 'oldest'
+let sortOrder = 'newest';
 
 // --- ルーティング定義 ---
 const routes = {
-    '': { 
-        label: 'ホーム', 
-        icon: 'home', 
-        render: renderHome 
-    },
-    '#policy': { 
-        label: '利用ポリシー', 
-        icon: 'shield-check', 
-        render: renderPolicy 
-    },
-    '#recruit': { 
-        label: '掲載依頼', 
-        icon: 'pen-tool', 
-        render: renderRecruit 
-    },
-    '#contact': { 
-        label: 'お問い合わせ', 
-        icon: 'mail', 
-        render: renderContact 
-    },
+    '': { label: 'ホーム', icon: 'home', render: renderHome },
+    '#policy': { label: '利用ポリシー', icon: 'shield-check', render: renderPolicy },
+    '#recruit': { label: '掲載依頼', icon: 'pen-tool', render: renderRecruit },
+    '#contact': { label: 'お問い合わせ', icon: 'mail', render: renderContact },
 };
 
 // --- DOM要素 ---
@@ -75,7 +54,7 @@ function setupNavigation() {
         </a>
     `).join('');
 
-    // スマホ用メニュー
+    // スマホ用メニューリンク
     els.mobileNavLinks.innerHTML = navItems.map(item => `
         <a href="${item.hash || '#'}" 
            class="nav-item block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50 flex items-center gap-3"
@@ -85,23 +64,43 @@ function setupNavigation() {
         </a>
     `).join('');
 
-    // 【✅ 修正箇所: スマホメニュー開閉のロジック】
-    els.mobileMenuBtn.addEventListener('click', () => {
+    // 【修正箇所: スマホメニュー開閉のロジック】
+    // 重複登録を防ぐため、一度cloneNodeを使って既存のリスナーを削除するか、
+    // ここで確実に1回だけ実行されるようにしています。
+    els.mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // バブリング防止（念のため）
+        
         // 1. メニューの表示/非表示を切り替える
         els.mobileNav.classList.toggle('hidden');
 
         // 2. アイコンを切り替える (メニュー <-> X)
-        const iconContainer = els.mobileMenuBtn.querySelector('i');
+        // Lucideが<i>タグを<svg>に変換してしまうため、コンテナ内の最初の要素（svgまたはi）を取得
+        const iconElement = els.mobileMenuBtn.firstElementChild;
+        
+        // 現在の状態を確認
+        const isHidden = els.mobileNav.classList.contains('hidden');
 
-        // LucideアイコンをHTML属性で切り替える
-        if (els.mobileNav.classList.contains('hidden')) {
-            iconContainer.setAttribute('data-lucide', 'menu'); // 閉じた状態
-        } else {
-            iconContainer.setAttribute('data-lucide', 'x'); // 開いた状態
-        }
+        // 新しいアイコンを設定するための<i>タグを再生成して置き換える
+        // (Lucideは既存のSVGの属性変更よりも、新しいタグを変換させる方が確実なため)
+        const newIconName = isHidden ? 'menu' : 'x';
+        
+        // ボタンの中身をリセットして新しいiタグを入れる
+        els.mobileMenuBtn.innerHTML = `<i data-lucide="${newIconName}" class="w-6 h-6 text-gray-600"></i>`;
 
-        // 3. Lucideライブラリに切り替えたアイコンを再描画させる
+        // 3. アイコン再描画
         lucide.createIcons();
+    });
+
+    // メニュー外クリックで閉じる処理（UX向上）
+    document.addEventListener('click', (e) => {
+        if (!els.mobileNav.classList.contains('hidden') && 
+            !els.mobileNav.contains(e.target) && 
+            !els.mobileMenuBtn.contains(e.target)) {
+            
+            els.mobileNav.classList.add('hidden');
+            els.mobileMenuBtn.innerHTML = `<i data-lucide="menu" class="w-6 h-6 text-gray-600"></i>`;
+            lucide.createIcons();
+        }
     });
 
     lucide.createIcons();
@@ -122,20 +121,17 @@ function updateActiveNav(currentHash) {
     });
 
     // ページ遷移時にスマホメニューを閉じる
-    // 【✅ 修正・追加箇所: リンククリック時にメニューを閉じる】
-    // ページ遷移（ハッシュ変更）が発生したら、モバイルメニューを強制的に非表示にする
     els.mobileNav.classList.add('hidden');
     
     // アイコンも「メニュー」に戻す
-    const iconContainer = els.mobileMenuBtn.querySelector('i');
-    iconContainer.setAttribute('data-lucide', 'menu');
+    els.mobileMenuBtn.innerHTML = `<i data-lucide="menu" class="w-6 h-6 text-gray-600"></i>`;
     lucide.createIcons();
 }
 
-// --- ルーティング処理 (変更なし) ---
+// --- ルーティング処理 ---
 function handleRoute() {
     const hash = window.location.hash;
-    const route = routes[hash] || routes['']; // デフォルトはホーム
+    const route = routes[hash] || routes['']; 
 
     updateActiveNav(hash);
 
@@ -145,16 +141,14 @@ function handleRoute() {
     // アイコン再生成
     lucide.createIcons();
 
-    // ページトップへ
     window.scrollTo(0, 0);
 
-    // ホーム画面固有のイベントリスナー設定
     if (!hash || hash === '#') {
         attachHomeEvents();
     }
 }
 
-// --- データ取得 (変更なし) ---
+// --- データ取得 ---
 async function fetchData() {
     try {
         const res = await fetch(SHEET_URL);
@@ -170,7 +164,7 @@ async function fetchData() {
     }
 }
 
-// --- CSVパーサー (変更なし) ---
+// --- CSVパーサー ---
 function parseCSV(text) {
     const rows = [];
     let currentRow = [], currentVal = '', insideQuote = false;
@@ -192,7 +186,6 @@ function parseCSV(text) {
     }
     if (currentRow.length) rows.push(currentRow);
 
-    // ヘッダーを除去し、オブジェクトに変換
     return rows.slice(1)
         .filter(r => r.length >= 3)
         .map((r, i) => ({
@@ -207,7 +200,6 @@ function parseCSV(text) {
 // ページレンダリング関数群
 // ==========================================
 
-// 1. ホーム画面 (変更なし)
 function renderHome() {
     if (!allPosts.length) return `<div class="text-center py-10 text-gray-500">募集中または読み込み中です...</div>`;
 
@@ -216,9 +208,7 @@ function renderHome() {
     );
 
     const cardsHtml = sorted.map((post, idx) => {
-        // 表示番号
         const displayNum = sortOrder === 'newest' ? sorted.length - idx : idx + 1;
-
         return `
         <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 group">
             <div class="post-trigger p-6 cursor-pointer select-none">
@@ -277,9 +267,7 @@ ${post.details}
     `;
 }
 
-// ホーム画面用イベント設定 (変更なし)
 function attachHomeEvents() {
-    // ソート変更
     const select = document.getElementById('sort-select');
     if (select) {
         select.addEventListener('change', (e) => {
@@ -288,7 +276,6 @@ function attachHomeEvents() {
         });
     }
 
-    // アコーディオン開閉
     document.querySelectorAll('.post-trigger').forEach(trigger => {
         trigger.addEventListener('click', () => {
             const detail = trigger.nextElementSibling;
@@ -296,12 +283,10 @@ function attachHomeEvents() {
             const label = trigger.querySelector('.toggle-label');
 
             if (detail.style.maxHeight) {
-                // 閉じる
                 detail.style.maxHeight = null;
                 icon.style.transform = 'rotate(0deg)';
                 label.textContent = '詳細を見る';
             } else {
-                // 開く
                 detail.style.maxHeight = detail.scrollHeight + 'px';
                 icon.style.transform = 'rotate(180deg)';
                 label.textContent = '閉じる';
@@ -310,7 +295,6 @@ function attachHomeEvents() {
     });
 }
 
-// 2. 利用ポリシー画面 【更新】
 function renderPolicy() {
     return `
     <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8">
@@ -318,9 +302,7 @@ function renderPolicy() {
             <h2 class="text-2xl font-bold text-primary mb-2">利用ポリシー</h2>
             <p class="text-gray-500 text-sm">最終更新日: 2025年11月23日</p>
         </div>
-
         <div class="space-y-8">
-            
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
                     <i data-lucide="info" class="w-5 h-5 text-accent"></i>
@@ -330,7 +312,6 @@ function renderPolicy() {
                     このサイト「被験者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。以下の方針に従い、利用者の皆さまが安心してご利用いただける環境を提供いたします。
                 </p>
             </section>
-            
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
                     <i data-lucide="lock" class="w-5 h-5 text-accent"></i>
@@ -340,7 +321,6 @@ function renderPolicy() {
                     応募フォームなどで提供いただいた情報は、募集に関するサイト運営のためのみに使用し、第三者への提供は一切行いません。
                 </p>
             </section>
-
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
                     <i data-lucide="package" class="w-5 h-5 text-accent"></i>
@@ -351,7 +331,6 @@ function renderPolicy() {
                     <li>サイト運営者は、投稿内容の正確性について保証いたしません。</li>
                 </ul>
             </section>
-
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
                     <i data-lucide="gavel" class="w-5 h-5 text-red-500"></i>
@@ -363,7 +342,6 @@ function renderPolicy() {
                     <li>営利・勧誘・広告目的の投稿</li>
                 </ul>
             </section>
-            
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
                     <i data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
@@ -373,7 +351,6 @@ function renderPolicy() {
                     当サイトの利用により生じた損害やトラブルについて、運営者は一切の責任を負いません。利用者ご自身の責任において情報をご利用ください。
                 </p>
             </section>
-
             <section>
                 <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-3 pb-2 border-b border-gray-100">
                     <i data-lucide="repeat-2" class="w-5 h-5 text-accent"></i>
@@ -384,7 +361,6 @@ function renderPolicy() {
                 </p>
             </section>
         </div>
-        
         <div class="mt-10 pt-6 border-t border-gray-100 text-center">
             <a href="#" onclick="history.back(); return false;" class="text-accent hover:underline text-sm font-medium">
                 ← 前のページに戻る
@@ -394,7 +370,6 @@ function renderPolicy() {
     `;
 }
 
-// 3. 掲載依頼画面 【更新】
 function renderRecruit() {
     return `
     <div class="max-w-3xl mx-auto space-y-6">
@@ -407,10 +382,8 @@ function renderRecruit() {
                 掲載依頼フォームへ
             </a>
         </div>
-
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
             <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b">掲載内容に関する規定</h3>
-            
             <div class="space-y-5">
                 <section>
                     <h4 class="font-bold text-accent mb-2 text-base flex items-center gap-2">
@@ -421,9 +394,7 @@ function renderRecruit() {
                         <li>各研究室の参加者募集のリンク（Sonaシステム、ホームページなど）も掲載可能です。</li>
                     </ul>
                 </section>
-                
                 <hr>
-
                 <section>
                     <h4 class="font-bold text-blue-800 mb-2 text-base flex items-center gap-2">
                         <i data-lucide="shield-check" class="w-4 h-4"></i>予防・注意事項
@@ -434,7 +405,6 @@ function renderRecruit() {
                         <li>**謝礼の有無は必ず明記**してください。また謝礼がアマゾンギフト券など**現金以外の場合も明記**してください。</li>
                     </ul>
                 </section>
-
                 <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
                     <p class="font-bold flex items-center gap-2 mb-1">
                         <i data-lucide="alert-triangle" class="w-4 h-4"></i>免責事項
@@ -447,40 +417,25 @@ function renderRecruit() {
     `;
 }
 
-// 4. お問い合わせ画面 【更新】
 function renderContact() {
     return `
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
         <div class="w-16 h-16 bg-blue-100 text-accent rounded-full flex items-center justify-center mx-auto mb-6">
             <i data-lucide="mail" class="w-8 h-8"></i>
         </div>
-        
         <h2 class="text-2xl font-bold text-primary mb-4">お問い合わせ</h2>
         <p class="text-gray-600 mb-6">
             ご質問・ご相談（掲載内容の修正・削除依頼など）がありましたら、<br>
             以下のフォームからご連絡ください。
         </p>
-        
         <a href="${CONTACT_FORM_URL}" target="_blank"
            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-white rounded-lg font-bold shadow-md hover:bg-blue-700 transition-transform hover:-translate-y-0.5">
             <i data-lucide="send" class="w-5 h-5"></i>
             お問い合わせフォームへ
         </a>
-
         <p class="text-xs text-gray-400 mt-8">
             ※研究内容自体に関する質問は、各募集の担当者へ直接お問い合わせください。
         </p>
     </div>
     `;
 }
-
-// DOM読み込み完了時に実行
-document.addEventListener('DOMContentLoaded', () => {
-    // 既存のinit()処理を実行
-    els.year.textContent = new Date().getFullYear();
-    setupNavigation();
-    fetchData().then(() => {
-        handleRoute();
-    });
-    window.addEventListener('hashchange', handleRoute);
-});
