@@ -260,20 +260,19 @@ function renderHome() {
 function toggleDetails(trigger) {
     const detail = trigger.nextElementSibling;
     const icon = trigger.querySelector('.chevron-icon');
+    const toggleText = trigger.querySelector('.toggle-text');
     
     // Calculate the height to slide smoothly
     if (detail.style.maxHeight) {
         // Close
         detail.style.maxHeight = null;
-        if (icon) {
-            icon.setAttribute('data-lucide', 'chevron-down');
-        }
+        if (icon) icon.setAttribute('data-lucide', 'chevron-down');
+        if (toggleText) toggleText.textContent = "▼ 詳細を表示";
     } else {
         // Open (set to scrollHeight)
         detail.style.maxHeight = detail.scrollHeight + "px";
-        if (icon) {
-            icon.setAttribute('data-lucide', 'chevron-up');
-        }
+        if (icon) icon.setAttribute('data-lucide', 'chevron-up');
+        if (toggleText) toggleText.textContent = "▲ 閉じる";
     }
     
     lucide.createIcons();
@@ -297,12 +296,17 @@ function createPostCard(post, displayIndex) {
                 </div>
             </div>
             
-            <h3 class="text-xl font-bold text-gray-800 leading-tight mb-2 flex items-start gap-2 pr-6">
+            <h3 class="text-xl font-bold text-gray-800 leading-tight mb-3 flex items-start gap-2 pr-6">
                 <i data-lucide="flask-conical" class="w-6 h-6 text-slate-400 flex-shrink-0 mt-0.5"></i>
                 ${post.title}
             </h3>
 
-            <!-- Chevron Icon (Down = Closed by default) -->
+            <!-- Toggle Text Indicator -->
+            <div class="text-accent font-bold text-sm toggle-text transition-colors">
+                ▼ 詳細を表示
+            </div>
+
+            <!-- Chevron Icon -->
             <div class="absolute top-5 right-5 text-gray-400 group-hover:text-accent transition-colors">
                  <i data-lucide="chevron-down" class="chevron-icon w-6 h-6"></i>
             </div>
