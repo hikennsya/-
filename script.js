@@ -1,9 +1,10 @@
+
 // Configuration
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
 
 // State
 let allPosts = [];
-let sortOrder = 'newest'; // 'newest' | 'oldest'
+let sortOrder = 'oldest'; // Default: Oldest first
 
 // DOM Elements
 const mainContent = document.getElementById('main-content');
@@ -176,7 +177,7 @@ function renderHome() {
     if (allPosts.length === 0) {
         // Show loading if empty and fetch hasn't failed/completed implies loading
         // But here simpler to just show skeleton or loading div
-        return; // Main content already has loading spinner by default or previous content
+        return; 
     }
 
     // Sort
@@ -209,8 +210,8 @@ function renderHome() {
                     <label for="sort-select" class="text-sm font-medium text-gray-600">並び替え</label>
                     <div class="relative">
                         <select id="sort-select" class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 font-medium hover:border-accent focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer shadow-sm">
-                            <option value="newest" ${sortOrder === 'newest' ? 'selected' : ''}>新着順</option>
                             <option value="oldest" ${sortOrder === 'oldest' ? 'selected' : ''}>投稿順</option>
+                            <option value="newest" ${sortOrder === 'newest' ? 'selected' : ''}>新着順</option>
                         </select>
                         <i data-lucide="arrow-up-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
@@ -240,23 +241,33 @@ function renderHome() {
         renderHome();
     });
 
-    // Toggle Detail Listeners
-    document.querySelectorAll('.post-card-trigger').forEach(card => {
-        card.addEventListener('click', (e) => {
-            const detail = card.nextElementSibling;
-            const icon = card.querySelector('.chevron-icon');
-            const isOpen = detail.classList.contains('open');
-            
-            if (isOpen) {
-                detail.classList.remove('open');
-                icon.setAttribute('data-lucide', 'chevron-down');
-            } else {
-                detail.classList.add('open');
-                icon.setAttribute('data-lucide', 'chevron-up');
-            }
-            lucide.createIcons();
+    // Toggle Details logic
+    document.querySelectorAll('.post-card-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => toggleDetails(trigger));
+    });
+
+    // Close Button logic
+    document.querySelectorAll('.close-detail-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const detail = btn.closest('.post-detail');
+            const trigger = detail.previousElementSibling;
+            toggleDetails(trigger);
         });
     });
+}
+
+function toggleDetails(trigger) {
+    const detail = trigger.nextElementSibling;
+    const icon = trigger.querySelector('.chevron-icon');
+    
+    detail.classList.toggle('open');
+    
+    const isOpen = detail.classList.contains('open');
+    if (icon) {
+        icon.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+        lucide.createIcons();
+    }
 }
 
 function createPostCard(post, displayIndex) {
@@ -264,9 +275,10 @@ function createPostCard(post, displayIndex) {
     const formattedDetails = post.details.replace(/\n/g, '<br/>');
 
     return `
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md">
-        <div class="post-card-trigger p-5 cursor-pointer hover:bg-gray-50 transition-colors">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md group">
+        <!-- Trigger Area -->
+        <div class="post-card-trigger p-5 cursor-pointer hover:bg-gray-50 transition-colors relative">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3 pr-8">
                 <div class="flex items-center space-x-2 text-xs font-semibold text-accent bg-blue-50 px-2 py-1 rounded-md w-fit">
                     <span>#${displayIndex}</span>
                 </div>
@@ -275,19 +287,24 @@ function createPostCard(post, displayIndex) {
                     ${post.timestamp}
                 </div>
             </div>
-            <h3 class="text-xl font-bold text-gray-800 leading-tight mb-2 flex items-start gap-2">
+            
+            <h3 class="text-xl font-bold text-gray-800 leading-tight mb-2 flex items-start gap-2 pr-6">
                 <i data-lucide="flask-conical" class="w-6 h-6 text-slate-400 flex-shrink-0 mt-0.5"></i>
                 ${post.title}
             </h3>
-            <div class="flex justify-center mt-2 md:hidden">
-                <i data-lucide="chevron-down" class="chevron-icon text-gray-400 w-5 h-5"></i>
+
+            <!-- Chevron Icon -->
+            <div class="absolute top-5 right-5 text-gray-400 group-hover:text-accent transition-colors">
+                 <i data-lucide="chevron-down" class="chevron-icon w-6 h-6"></i>
             </div>
         </div>
+
+        <!-- Detail Area -->
         <div class="post-detail bg-gray-50 border-t border-gray-100">
             <div class="p-6 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-wrap">
                 <div class="prose prose-blue max-w-none">${formattedDetails}</div>
                 <div class="mt-6 pt-4 border-t border-gray-200 flex justify-end">
-                    <button class="text-sm text-gray-500 hover:text-accent font-medium flex items-center gap-1" onclick="this.parentElement.parentElement.parentElement.classList.remove('open')">
+                    <button class="close-detail-btn text-sm text-gray-500 hover:text-accent font-medium flex items-center gap-1">
                         閉じる <i data-lucide="chevron-up" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -338,8 +355,8 @@ function renderRecruit() {
                 </ul>
             </div>
             <div class="text-center mt-8">
-                <a href="#" class="inline-block bg-accent hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform hover:-translate-y-0.5">
-                    掲載依頼フォーム (Demo)
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSe9ct1JVa42u4tWHIqFQJegyq1s2b2rjiSpc84EBqq65QkLug/viewform" target="_blank" class="inline-block bg-accent hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform hover:-translate-y-0.5">
+                    掲載依頼フォーム
                 </a>
             </div>
         </div>
@@ -354,12 +371,26 @@ function renderContact() {
             <h1 class="text-2xl font-bold text-gray-900">お問い合わせ</h1>
         </div>
         <div class="text-gray-700">
-            <p class="mb-6">当サイトに関するご意見・ご質問は、各SNSのDMにてご連絡ください。</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                <a href="https://x.com/hikennsya_keiji" target="_blank" class="flex items-center justify-center p-6 border border-gray-200 rounded-xl hover:border-gray-900 transition-colors">
+            <p class="mb-6">当サイトに関するご意見・ご質問は、以下のフォームまたはSNSのDMにてご連絡ください。</p>
+            
+            <div class="text-center mb-10">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSexVAhliA-a_VG2fiyEZZUGmuBVKxXgtmdIdciqKai-Ki0ssg/viewform?usp=dialog" target="_blank" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-all hover:-translate-y-1">
+                    <i data-lucide="send" class="w-5 h-5"></i> お問い合わせフォーム
+                </a>
+            </div>
+
+            <h3 class="font-bold text-gray-900 mb-4 text-center">SNS DMでも受付中</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="https://x.com/hikennsya_keiji" target="_blank" class="flex items-center justify-center p-6 border border-gray-200 rounded-xl hover:border-black hover:bg-gray-50 transition-all group">
                     <div class="text-center">
-                        <span class="block font-bold text-lg mb-1">X (Twitter)</span>
+                        <span class="block font-bold text-lg mb-1 group-hover:text-black">X (Twitter)</span>
                         <span class="text-sm text-gray-500">@hikennsya_keiji</span>
+                    </div>
+                </a>
+                 <a href="https://www.threads.net/@hikennsya_keijiban" target="_blank" class="flex items-center justify-center p-6 border border-gray-200 rounded-xl hover:border-black hover:bg-gray-50 transition-all group">
+                    <div class="text-center">
+                        <span class="block font-bold text-lg mb-1 group-hover:text-black">Threads</span>
+                        <span class="text-sm text-gray-500">@hikennsya_keijiban</span>
                     </div>
                 </a>
             </div>
