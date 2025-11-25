@@ -87,8 +87,18 @@ function setupNavigation() {
     `).join('');
 
     // スマホメニュー開閉
-    els.mobileMenuBtn.addEventListener('click', () => {
+   els.mobileMenuBtn.addEventListener('click', () => {
+        // hidden クラスをトグル（付けたり外したり）することで表示・非表示を切り替えます
         els.mobileNav.classList.toggle('hidden');
+        
+        // オプショナル: メニューが開いたときにアイコンを「X」に変える処理 (Lucide Iconを使用)
+        const iconElement = els.mobileMenuBtn.querySelector('i');
+        if (iconElement.dataset.lucide === 'menu') {
+            iconElement.dataset.lucide = 'x';
+        } else {
+            iconElement.dataset.lucide = 'menu';
+        }
+        lucide.createIcons();
     });
 
     lucide.createIcons();
