@@ -4,7 +4,7 @@ const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l
 
 // State
 let allPosts = [];
-let sortOrder = 'oldest'; // Default: Oldest first
+let sortOrder = 'newest'; // Default: Newest first
 
 // DOM Elements
 const mainContent = document.getElementById('main-content');
@@ -210,8 +210,8 @@ function renderHome() {
                     <label for="sort-select" class="text-sm font-medium text-gray-600">並び替え</label>
                     <div class="relative">
                         <select id="sort-select" class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 font-medium hover:border-accent focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer shadow-sm">
-                            <option value="oldest" ${sortOrder === 'oldest' ? 'selected' : ''}>投稿順</option>
                             <option value="newest" ${sortOrder === 'newest' ? 'selected' : ''}>新着順</option>
+                            <option value="oldest" ${sortOrder === 'oldest' ? 'selected' : ''}>投稿順</option>
                         </select>
                         <i data-lucide="arrow-up-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
@@ -284,24 +284,27 @@ function createPostCard(post, displayIndex) {
 
     return `
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md group">
-        <!-- Trigger Area -->
+        <!-- Trigger Area: Displays Title, Number, Time ONLY -->
         <div class="post-card-trigger p-5 cursor-pointer hover:bg-gray-50 transition-colors relative">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3 pr-8">
+                <!-- Number -->
                 <div class="flex items-center space-x-2 text-xs font-semibold text-accent bg-blue-50 px-2 py-1 rounded-md w-fit">
                     <span>#${displayIndex}</span>
                 </div>
+                <!-- Time -->
                 <div class="flex items-center text-gray-500 text-sm">
                     <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
                     ${post.timestamp}
                 </div>
             </div>
             
+            <!-- Title -->
             <h3 class="text-xl font-bold text-gray-800 leading-tight mb-3 flex items-start gap-2 pr-6">
                 <i data-lucide="flask-conical" class="w-6 h-6 text-slate-400 flex-shrink-0 mt-0.5"></i>
                 ${post.title}
             </h3>
 
-            <!-- Toggle Text Indicator -->
+            <!-- Toggle Button Text -->
             <div class="text-accent font-bold text-sm toggle-text transition-colors">
                 ▼ 詳細を表示
             </div>
@@ -312,7 +315,7 @@ function createPostCard(post, displayIndex) {
             </div>
         </div>
 
-        <!-- Detail Area -->
+        <!-- Detail Area: Hidden by default -->
         <div class="post-detail bg-gray-50 border-t border-gray-100">
             <div class="p-6 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-wrap">
                 <div class="prose prose-blue max-w-none">${formattedDetails}</div>
