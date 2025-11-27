@@ -65,12 +65,11 @@ function setupNavigation() {
     `).join('');
 
     // 【修正箇所: スマホメニュー開閉のロジック】
-    // 重複登録を防ぐため、一度cloneNodeを使って既存のリスナーを削除するか、
-    // ここで確実に1回だけ実行されるようにしています。
+
     els.mobileMenuBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // バブリング防止（念のため）
+        e.stopPropagation(); // バブリング防止
         
-        // 1. メニューの表示/非表示を切り替える
+        // 1. メニュー表示/非表示切り替え
         els.mobileNav.classList.toggle('hidden');
 
         // 2. アイコンを切り替える (メニュー <-> X)
@@ -309,7 +308,7 @@ function renderPolicy() {
                     サイトの目的
                 </h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    このサイト「実験参加者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。以下の方針に従い、利用者の皆さまが安心してご利用いただける環境を提供いたします。
+                    このサイト「実験参加者募集」は、研究や実験などへの参加希望者を募集する目的で運営されています。以下の方針に従い、利用者の皆さまが安心してご利用いただける環境を提供いたします。
                 </p>
             </section>
             <section>
