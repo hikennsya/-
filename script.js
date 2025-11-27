@@ -309,7 +309,7 @@ function renderPolicy() {
                     サイトの目的
                 </h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    このサイト「被験者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。以下の方針に従い、利用者の皆さまが安心してご利用いただける環境を提供いたします。
+                    このサイト「実験参加者募集掲示板」は、研究や実験などへの参加希望者を募集する目的で運営されています。以下の方針に従い、利用者の皆さまが安心してご利用いただける環境を提供いたします。
                 </p>
             </section>
             <section>
@@ -374,8 +374,8 @@ function renderRecruit() {
     return `
     <div class="max-w-3xl mx-auto space-y-6">
         <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg">
-            <h2 class="text-2xl font-bold mb-4">実験被験者を募集しませんか？</h2>
-            <p class="opacity-90 mb-6">研究・実験の被験者募集を無料で掲載できます。</p>
+            <h2 class="text-2xl font-bold mb-4">実験参加者を募集しませんか？</h2>
+            <p class="opacity-90 mb-6">研究・実験の参加者募集を無料で掲載できます。</p>
             <a href="${RECRUIT_FORM_URL}" target="_blank" 
                class="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-md hover:bg-gray-100 transition-transform hover:-translate-y-1">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
@@ -390,7 +390,7 @@ function renderRecruit() {
                         <i data-lucide="package" class="w-4 h-4"></i>掲載可能な内容
                     </h4>
                     <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
-                        <li>実験の被験者を**無料**で募集することが可能です。</li>
+                        <li>実験の参加者を**無料**で募集することが可能です。</li>
                         <li>各研究室の参加者募集のリンク（Sonaシステム、ホームページなど）も掲載可能です。</li>
                     </ul>
                 </section>
