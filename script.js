@@ -440,45 +440,84 @@ function renderContact() {
     `;
 }
 function renderFaq() {
-    const faqs = [
+    const faqCategories = [
         {
-            q: "掲載料は掛かりますか？",
-            a: "いいえ、無料で掲載できます。"
+            label: "参加したい方へ",
+            icon: "user",
+            items: [
+               
+                {
+                    q: "複数の実験に同時に応募しても大丈夫ですか？",
+                    a: "基本的には可能ですが、実験によっては「過去に似た実験を受けた人は不可」という制限がある場合があります。各実験の条件をよくご確認ください。"
+                },
+               
+            ]
         },
-
+        {
+            label: "掲載したい方へ",
+            icon: "clipboard-list",
+            items: [
+                {
+                    q: "掲載料は掛かりますか？",
+                    a: "いいえ、無料で掲載できます。研究室のリンク（Sonaシステム等）も掲載可能です。"
+                },
+                {
+                    q: "掲載を終了するにはどうすればいいですか？",
+                    a: "募集が終了した場合は実験名の前に【募集終了】と表記してください。掲載自体を取りやめたい場合は、お問い合わせフォームより「実験名」と「メールアドレス」、掲載を取りやめる旨をご連絡いただければ、速やかに削除いたします。"
+                },
+                {
+                    q: "写真や資料を掲載することはできますか？",
+                    a: "現在、掲示板はテキストベースとなっております。詳細な資料がある場合は、Googleドライブの共有リンクや、研究室HPのURLを詳細欄に記載いただくことを推奨しています。"
+                }
+            ]
+        }
     ];
 
-    const faqHtml = faqs.map(item => `
-        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-4">
-            <summary class="flex items-center justify-between p-5 cursor-pointer list-none focus:outline-none">
-                <span class="text-sm font-bold text-primary flex items-center gap-3">
-                    <span class="w-6 h-6 bg-blue-100 text-accent rounded-full flex items-center justify-center text-xs">Q</span>
-                    ${item.q}
-                </span>
-                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300 group-open:rotate-180"></i>
-            </summary>
-            <div class="px-5 pb-5 pt-0 text-sm text-gray-600 leading-relaxed border-t border-gray-50 bg-gray-50/50">
-                <div class="flex gap-3 pt-4">
-                    <span class="w-6 h-6 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">A</span>
-                    <p>${item.a}</p>
-                </div>
+    const sectionsHtml = faqCategories.map(cat => `
+        <section class="mb-10">
+            <h3 class="flex items-center gap-2 text-lg font-bold text-primary mb-4 px-2">
+                <i data-lucide="${cat.icon}" class="w-5 h-5 text-accent"></i>
+                ${cat.label}
+            </h3>
+            <div class="space-y-4">
+                ${cat.items.map(item => `
+                    <details class="group bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer list-none focus:outline-none">
+                            <span class="text-sm font-bold text-primary flex items-center gap-3">
+                                <span class="w-6 h-6 bg-blue-100 text-accent rounded-full flex items-center justify-center text-xs shrink-0">Q</span>
+                                ${item.q}
+                            </span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300 group-open:rotate-180"></i>
+                        </summary>
+                        <div class="px-5 pb-5 pt-0 text-sm text-gray-600 leading-relaxed border-t border-gray-50 bg-gray-50/50">
+                            <div class="flex gap-3 pt-4">
+                                <span class="w-6 h-6 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">A</span>
+                                <p>${item.a}</p>
+                            </div>
+                        </div>
+                    </details>
+                `).join('')}
             </div>
-        </details>
+        </section>
     `).join('');
 
     return `
     <div class="max-w-3xl mx-auto space-y-6">
         <div class="text-center mb-8">
             <h2 class="text-2xl font-bold text-primary mb-2">よくある質問</h2>
-            <p class="text-gray-500 text-sm">実験参加に関する疑問にお答えします</p>
+            <p class="text-gray-500 text-sm">参加者・掲載者それぞれの疑問にお答えします</p>
         </div>
-        <div class="faq-container">
-            ${faqHtml}
+        
+        <div class="faq-sections">
+            ${sectionsHtml}
         </div>
-        <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 text-center">
-            <p class="text-sm text-gray-700 mb-4">解決しない場合は、お気軽にお問い合わせください。</p>
-            <a href="#contact" class="inline-flex items-center gap-2 text-accent font-bold hover:underline">
-                お問い合わせはこちら <i data-lucide="arrow-right" class="w-4 h-4"></i>
+
+        <div class="bg-blue-50 p-8 rounded-2xl border border-blue-100 text-center">
+            <h4 class="font-bold text-primary mb-2">解決しない場合はありますか？</h4>
+            <p class="text-sm text-gray-600 mb-6">掲載内容の修正依頼や、システムに関するご質問はフォームより受け付けています。</p>
+            <a href="#contact" class="inline-flex items-center gap-2 bg-accent text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+                お問い合わせはこちら
             </a>
         </div>
     </div>
