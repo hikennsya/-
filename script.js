@@ -514,7 +514,7 @@ function renderFaq() {
 
         <div class="bg-blue-50 p-8 rounded-2xl border border-blue-100 text-center">
             <h4 class="font-bold text-primary mb-2">解決しない場合はありますか？</h4>
-            <p class="text-sm text-gray-600 mb-6">掲載内容の修正依頼や、システムに関するご質問はフォームより受け付けています。</p>
+            <p class="text-sm text-gray-600 mb-6">ご質問はフォームより受け付けています。</p>
             <a href="#contact" class="inline-flex items-center gap-2 bg-accent text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
                 <i data-lucide="mail" class="w-5 h-5"></i>
                 お問い合わせはこちら
