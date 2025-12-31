@@ -439,3 +439,48 @@ function renderContact() {
     </div>
     `;
 }
+function renderFaq() {
+    const faqs = [
+        {
+            q: "掲載料は掛かりますか？",
+            a: "いいえ、無料で掲載できます。"
+        },
+
+    ];
+
+    const faqHtml = faqs.map(item => `
+        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-4">
+            <summary class="flex items-center justify-between p-5 cursor-pointer list-none focus:outline-none">
+                <span class="text-sm font-bold text-primary flex items-center gap-3">
+                    <span class="w-6 h-6 bg-blue-100 text-accent rounded-full flex items-center justify-center text-xs">Q</span>
+                    ${item.q}
+                </span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300 group-open:rotate-180"></i>
+            </summary>
+            <div class="px-5 pb-5 pt-0 text-sm text-gray-600 leading-relaxed border-t border-gray-50 bg-gray-50/50">
+                <div class="flex gap-3 pt-4">
+                    <span class="w-6 h-6 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">A</span>
+                    <p>${item.a}</p>
+                </div>
+            </div>
+        </details>
+    `).join('');
+
+    return `
+    <div class="max-w-3xl mx-auto space-y-6">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-primary mb-2">よくある質問</h2>
+            <p class="text-gray-500 text-sm">実験参加に関する疑問にお答えします</p>
+        </div>
+        <div class="faq-container">
+            ${faqHtml}
+        </div>
+        <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 text-center">
+            <p class="text-sm text-gray-700 mb-4">解決しない場合は、お気軽にお問い合わせください。</p>
+            <a href="#contact" class="inline-flex items-center gap-2 text-accent font-bold hover:underline">
+                お問い合わせはこちら <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </div>
+    `;
+}
