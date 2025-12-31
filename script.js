@@ -4,6 +4,35 @@
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRwty1oe-6s7l6GPnMyo-nhQk2vDfnWKsdlzmgdGo1ey7g1QNLusXc_iIbAJYdE8RhLwRnLobvrBvDV/pub?gid=821609257&single=true&output=csv';
 const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSexVAhliA-a_VG2fiyEZZUGmuBVKxXgtmdIdciqKai-Ki0ssg/viewform?usp=dialog'; 
 const RECRUIT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe9ct1JVa42u4tWHIqFQJegyq1s2b2rjiSpc84EBqq65QkLug/viewform'; 
+const i18n = {
+    jp: {
+        home: "ホーム", policy: "ポリシー", recruit: "掲載", contact: "お問い合わせ", faq: "よくある質問",
+        title: "実験参加者募集", subtitle: "大学研究・心理学実験への参加募集",
+        aboutTitle: "当サイトについて", aboutText: "大学の研究実験やアンケートの協力者を募集する掲示板です。",
+        countSuffix: "件の募集", sortNew: "新着順", sortOld: "古い順",
+        more: "詳細を見る", close: "閉じる",
+        langBtn: "English"
+    },
+    en: {
+        home: "Home", policy: "Policy", recruit: "Post", contact: "Contact", faq: "FAQ",
+        title: "Experiment Recruitment", subtitle: "Recruiting participants for university research",
+        aboutTitle: "About Us", aboutText: "A bulletin board for recruiting participants for university experiments and surveys.",
+        countSuffix: " posts", sortNew: "Newest", sortOld: "Oldest",
+        more: "View Details", close: "Close",
+        langBtn: "日本語"
+    }
+};
+
+function getRoutes() {
+    const t = i18n[currentLang];
+    return {
+        '': { label: t.home, icon: 'home', render: renderHome },
+        '#faq': { label: t.faq, icon: 'help-circle', render: renderFaq },
+        '#policy': { label: t.policy, icon: 'shield-check', render: renderPolicy },
+        '#recruit': { label: t.recruit, icon: 'pen-tool', render: renderRecruit },
+        '#contact': { label: t.contact, icon: 'mail', render: renderContact },
+    };
+}
 
 // --- ステート管理 ---
 let allPosts = [];
@@ -43,9 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setupNavigation() {
+    const routes = getRoutes();
     const navItems = Object.entries(routes).map(([hash, route]) => ({ hash, ...route }));
+    const t = i18n[currentLang];
 
-    // PC用メニュー
+    // PC用メニュー（リンク + 言語ボタン）
     els.desktopNav.innerHTML = navItems.map(item => `
         <a href="${item.hash || '#'}" 
            class="nav-item px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-accent hover:bg-blue-50 transition-all flex items-center gap-2"
@@ -53,9 +84,13 @@ function setupNavigation() {
             <i data-lucide="${item.icon}" class="w-4 h-4"></i>
             ${item.label}
         </a>
-    `).join('');
+    `).join('') + `
+        <button id="lang-toggle-pc" class="ml-4 px-3 py-1 border border-accent text-accent rounded-full text-xs font-bold hover:bg-blue-50 transition-all">
+            ${t.langBtn}
+        </button>
+    `;
 
-    // スマホ用メニューリンク
+    // スマホ用メニューリンク（最後に言語ボタンを追加）
     els.mobileNavLinks.innerHTML = navItems.map(item => `
         <a href="${item.hash || '#'}" 
            class="nav-item block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50 flex items-center gap-3"
@@ -63,45 +98,32 @@ function setupNavigation() {
             <i data-lucide="${item.icon}" class="w-5 h-5"></i>
             ${item.label}
         </a>
-    `).join('');
+    `).join('') + `
+        <div class="px-3 py-2 border-t border-gray-100 mt-2">
+            <button id="lang-toggle-mobile" class="w-full py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-bold">
+                ${t.langBtn}
+            </button>
+        </div>
+    `;
 
-    // 【修正箇所: スマホメニュー開閉のロジック】
+    // 言語切替イベントの登録
+    const toggleLang = () => {
+        currentLang = currentLang === 'jp' ? 'en' : 'jp';
+        setupNavigation(); // ナビを再描画
+        handleRoute();     // コンテンツを再描画
+    };
 
-    els.mobileMenuBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // バブリング防止
-        
-        // 1. メニュー表示/非表示切り替え
-        els.mobileNav.classList.toggle('hidden');
+    document.getElementById('lang-toggle-pc')?.addEventListener('click', toggleLang);
+    document.getElementById('lang-toggle-mobile')?.addEventListener('click', toggleLang);
 
-        // 2. アイコンを切り替える (メニュー <-> X)
-        // Lucideが<i>タグを<svg>に変換してしまうため、コンテナ内の最初の要素（svgまたはi）を取得
-        const iconElement = els.mobileMenuBtn.firstElementChild;
-        
-        // 現在の状態を確認
-        const isHidden = els.mobileNav.classList.contains('hidden');
-
-        // 新しいアイコンを設定するための<i>タグを再生成して置き換える
-        // (Lucideは既存のSVGの属性変更よりも、新しいタグを変換させる方が確実なため)
+    // スマホメニュー開閉ロジック (既存のものを維持)
+    els.mobileMenuBtn.onclick = (e) => {
+        e.stopPropagation();
+        const isHidden = els.mobileNav.classList.toggle('hidden');
         const newIconName = isHidden ? 'menu' : 'x';
-        
-        // ボタンの中身をリセットして新しいiタグを入れる
         els.mobileMenuBtn.innerHTML = `<i data-lucide="${newIconName}" class="w-6 h-6 text-gray-600"></i>`;
-
-        // 3. アイコン再描画
         lucide.createIcons();
-    });
-
-    // メニュー外クリックで閉じる処理（UX向上）
-    document.addEventListener('click', (e) => {
-        if (!els.mobileNav.classList.contains('hidden') && 
-            !els.mobileNav.contains(e.target) && 
-            !els.mobileMenuBtn.contains(e.target)) {
-            
-            els.mobileNav.classList.add('hidden');
-            els.mobileMenuBtn.innerHTML = `<i data-lucide="menu" class="w-6 h-6 text-gray-600"></i>`;
-            lucide.createIcons();
-        }
-    });
+    };
 
     lucide.createIcons();
 }
@@ -201,11 +223,88 @@ function parseCSV(text) {
 // ==========================================
 
 function renderHome() {
-    if (!allPosts.length) return `<div class="text-center py-10 text-gray-500">募集中または読み込み中です...</div>`;
+    const t = i18n[currentLang];
+    
+    if (!allPosts.length) {
+        return `
+            <div class="text-center py-20">
+                <div class="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-10 max-w-md mx-auto">
+                    <i data-lucide="search" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
+                    <p class="text-gray-500 mb-4">${t.loading || '現在、新しい募集を準備中です...'}</p>
+                    <a href="#recruit" class="text-accent font-bold hover:underline">
+                        ${currentLang === 'jp' ? '最初の募集を掲載しませんか？' : 'Be the first to post a recruitment!'}
+                    </a>
+                </div>
+            </div>`;
+    }
 
     const sorted = [...allPosts].sort((a, b) => 
         sortOrder === 'newest' ? b.id - a.id : a.id - b.id
     );
+
+    const cardsHtml = sorted.map((post, idx) => {
+        const displayNum = sortOrder === 'newest' ? sorted.length - idx : idx + 1;
+        return `
+        <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 group">
+            <div class="post-trigger p-6 cursor-pointer select-none">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="bg-blue-100 text-accent text-xs font-bold px-2 py-1 rounded">#${displayNum}</span>
+                    <span class="text-xs text-gray-400 flex items-center gap-1">
+                        <i data-lucide="clock" class="w-3 h-3"></i> ${post.timestamp}
+                    </span>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2 group-hover:text-accent transition-colors">
+                    ${post.title}
+                </h3>
+                <div class="flex items-center justify-between mt-4">
+                    <span class="text-sm font-medium text-accent flex items-center gap-1 toggle-label">
+                        ${t.more}
+                    </span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-gray-300 transition-transform duration-300 chevron-icon"></i>
+                </div>
+            </div>
+            <div class="post-detail max-h-0 overflow-hidden transition-all duration-300 ease-out bg-gray-50 border-t border-gray-100">
+                <div class="p-6 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap prose prose-sm max-w-none">
+                    ${post.details}
+                </div>
+            </div>
+        </article>
+        `;
+    }).join('');
+
+    return `
+        <div class="space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-blue-100 shadow-sm flex gap-4 items-start">
+                <div class="bg-blue-50 p-2 rounded-lg text-accent shrink-0">
+                    <i data-lucide="info" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-primary mb-1">${t.aboutTitle}</h2>
+                    <p class="text-sm text-gray-600">
+                        ${t.aboutText}<br>
+                        <span class="text-xs mt-2 inline-block text-gray-400">
+                            ${currentLang === 'jp' 
+                                ? '※掲載は最短1分で完了。大学の研究者・学生ならどなたでも無料で掲載可能です。' 
+                                : '*Posting takes as little as 1 minute. Free for university researchers and students.'}
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center px-2">
+                <span class="text-sm font-bold text-gray-500">${sorted.length}${t.countSuffix}</span>
+                <select id="sort-select" class="text-sm border-gray-300 rounded-lg shadow-sm focus:border-accent focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-1.5">
+                    <option value="newest" ${sortOrder==='newest'?'selected':''}>${t.sortNew}</option>
+                    <option value="oldest" ${sortOrder==='oldest'?'selected':''}>${t.sortOld}</option>
+                </select>
+            </div>
+
+            <div class="grid gap-4">
+                ${cardsHtml}
+            </div>
+        </div>
+    `;
+}
 
     const cardsHtml = sorted.map((post, idx) => {
         const displayNum = sortOrder === 'newest' ? sorted.length - idx : idx + 1;
