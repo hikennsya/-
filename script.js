@@ -15,6 +15,7 @@ const routes = {
     '#policy': { label: '利用ポリシー', icon: 'shield-check', render: renderPolicy },
     '#recruit': { label: '掲載', icon: 'pen-tool', render: renderRecruit },
     '#contact': { label: 'お問い合わせ', icon: 'mail', render: renderContact },
+    '#faq': { label: 'よくある質問', icon: 'help-circle', render: renderFaq }, // 追加
 };
 
 // --- DOM要素 ---
