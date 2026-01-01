@@ -249,68 +249,90 @@ function renderPolicy() {
 
 function renderRecruit() {
     const t = i18n[currentLang];
-    const content = currentLang === 'jp' ? `
     
-    return `
-    <div class="max-w-5xl mx-auto space-y-6">
-        <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg">
+    // 1. 共通のヒーローセクション（青いバナー部分）を作成
+    const heroSection = `
+        <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg mb-8">
             <h2 class="text-2xl font-bold mb-4">${t.recruitHero}</h2>
             <p class="opacity-90 mb-6">${t.recruitSub}</p>
             <a href="${RECRUIT_FORM_URL}" target="_blank" class="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-md hover:bg-gray-100 transition-transform hover:-translate-y-1">
                 <i data-lucide="external-link" class="w-4 h-4"></i> ${t.recruitBtn}
             </a>
         </div>
-        <section class="space-y-4">
-            <h4 class="font-bold text-accent mb-2 text-base flex items-center gap-2">
-                <i data-lucide="package" class="w-4 h-4"></i>掲載可能な内容
-            </h4>
-            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
-                <li>実験の参加者を**無料**で募集することが可能です。</li>
-                <li>各研究室の参加者募集のリンク（Sonaシステム、ホームページなど）も掲載可能です。</li>
-            </ul>
-            <hr>
-            <h4 class="font-bold text-blue-800 mb-2 text-base flex items-center gap-2">
-                <i data-lucide="shield-check" class="w-4 h-4"></i>注意事項
-            </h4>
-            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
-                <li>掲載料金などは一切かかりません。</li>
-                <li>実験・調査内容に**虚偽を含まない**こと。</li>
-                <li>**謝礼の有無は必ず明記**してください。また謝礼がアマゾンギフト券など**現金以外の場合も明記**してください。</li>
-            </ul>
-            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
-                <p class="font-bold flex items-center gap-2 mb-1">
+    `;
+
+    // 2. 言語ごとの詳細ガイドラインを作成
+    const guideContent = currentLang === 'jp' ? `
+        <section class="space-y-6">
+            <div>
+                <h4 class="font-bold text-accent mb-3 text-base flex items-center gap-2">
+                    <i data-lucide="package" class="w-5 h-5"></i>掲載可能な内容
+                </h4>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 pl-4">
+                    <li>実験の参加者を**無料**で募集することが可能です。</li>
+                    <li>各研究室の参加者募集のリンク（Sonaシステム、ホームページなど）も掲載可能です。</li>
+                    <li>学生個人の卒業論文や課題のための調査も掲載可能です。</li>
+                </ul>
+            </div>
+            <hr class="border-gray-100">
+            <div>
+                <h4 class="font-bold text-blue-800 mb-3 text-base flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>注意事項
+                </h4>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 pl-4">
+                    <li>掲載料金などは一切かかりません。</li>
+                    <li>実験・調査内容に**虚偽を含まない**こと。</li>
+                    <li>**謝礼の有無は必ず明記**してください。また謝礼がアマゾンギフト券など**現金以外の場合も明記**してください。</li>
+                </ul>
+            </div>
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
+                <p class="font-bold flex items-center gap-2 mb-1 text-yellow-800">
                     <i data-lucide="alert-triangle" class="w-4 h-4"></i>免責事項
                 </p>
-                当サイトを通じて行われる参加者募集に関連して生じたいかなる問題についても、当サイトは一切の責任を負いません。
+                当サイトを通じて行われる参加者募集に関連して生じたいかなる問題についても、当サイトは一切の責任を負いません。あらかじめご承知おきください。
             </div>
         </section>
     ` : `
-        <section class="space-y-4">
-            <h4 class="font-bold text-accent mb-2 text-base flex items-center gap-2">
-                <i data-lucide="package" class="w-4 h-4"></i>What you can post
-            </h4>
-            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
-                <li>You can recruit experiment participants for **free**.</li>
-                <li>Links to lab recruitment systems (Sona, websites, etc.) can also be posted.</li>
-            </ul>
-            <hr>
-            <h4 class="font-bold text-blue-800 mb-2 text-base flex items-center gap-2">
-                <i data-lucide="shield-check" class="w-4 h-4"></i>Important Notes
-            </h4>
-            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
-                <li>There are no posting fees.</li>
-                <li>The experiment/survey must **not contain false information**.</li>
-                <li>**Reward details must be stated clearly**. If the reward is non-cash (e.g., Amazon gift card), please specify it.</li>
-            </ul>
-            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
-                <p class="font-bold flex items-center gap-2 mb-1">
+        <section class="space-y-6">
+            <div>
+                <h4 class="font-bold text-accent mb-3 text-base flex items-center gap-2">
+                    <i data-lucide="package" class="w-5 h-5"></i>What you can post
+                </h4>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 pl-4">
+                    <li>You can recruit experiment participants for **free**.</li>
+                    <li>Links to lab recruitment systems (Sona, websites, etc.) can also be posted.</li>
+                    <li>Surveys for individual student theses or assignments are also welcome.</li>
+                </ul>
+            </div>
+            <hr class="border-gray-100">
+            <div>
+                <h4 class="font-bold text-blue-800 mb-3 text-base flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>Important Notes
+                </h4>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 pl-4">
+                    <li>There are no fees for posting.</li>
+                    <li>The experiment/survey must **not contain false information**.</li>
+                    <li>**Reward details must be stated clearly**. If the reward is non-cash (e.g., Amazon gift card), please specify it.</li>
+                </ul>
+            </div>
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
+                <p class="font-bold flex items-center gap-2 mb-1 text-yellow-800">
                     <i data-lucide="alert-triangle" class="w-4 h-4"></i>Disclaimer
                 </p>
-                This site is not responsible for any issues arising from participation in any research posted here.
+                This site is not responsible for any issues or disputes arising from participation in any research posted here.
             </div>
         </section>
     `;
-    return `<div class="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8">${content}</div>`;
+
+    // 3. 全体を組み合わせて返す
+    return `
+        <div class="max-w-5xl mx-auto">
+            ${heroSection}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                ${guideContent}
+            </div>
+        </div>
+    `;
 }
 
 function renderContact() {
