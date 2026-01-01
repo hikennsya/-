@@ -250,6 +250,16 @@ function renderPolicy() {
 function renderRecruit() {
     const t = i18n[currentLang];
     const content = currentLang === 'jp' ? `
+    
+    return `
+    <div class="max-w-5xl mx-auto space-y-6">
+        <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">${t.recruitHero}</h2>
+            <p class="opacity-90 mb-6">${t.recruitSub}</p>
+            <a href="${RECRUIT_FORM_URL}" target="_blank" class="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-md hover:bg-gray-100 transition-transform hover:-translate-y-1">
+                <i data-lucide="external-link" class="w-4 h-4"></i> ${t.recruitBtn}
+            </a>
+        </div>
         <section class="space-y-4">
             <h4 class="font-bold text-accent mb-2 text-base flex items-center gap-2">
                 <i data-lucide="package" class="w-4 h-4"></i>掲載可能な内容
