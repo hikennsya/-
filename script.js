@@ -11,7 +11,7 @@ let sortOrder = 'newest';
 // --- 多言語辞書 ---
 const i18n = {
     jp: {
-        home: "ホーム", policy: "ポリシー", recruit: "掲載", contact: "お問い合わせ", faq: "よくある質問",
+        siteName: "実験参加者募集",home: "ホーム", policy: "ポリシー", recruit: "掲載", contact: "お問い合わせ", faq: "よくある質問",
         title: "実験参加者募集", subtitle: "大学研究・心理学実験への参加募集",
         aboutTitle: "当サイトについて", aboutText: "大学の研究実験やアンケートの協力者を募集する掲示板です。",
         recruitHint: "※掲載は最短1分で完了。大学の研究者・学生ならどなたでも無料で掲載可能です。",
@@ -25,7 +25,7 @@ const i18n = {
         contactBtn: "お問い合わせフォームへ"
     },
     en: {
-        home: "Home", policy: "Policy", recruit: "Post", contact: "Contact", faq: "FAQ",
+        siteName: "Experiment Recruitment",home: "Home", policy: "Policy", recruit: "Post", contact: "Contact", faq: "FAQ",
         title: "Experiment Recruitment", subtitle: "Recruiting participants for university research",
         aboutTitle: "About Us", aboutText: "A bulletin board for recruiting participants for university experiments and surveys.",
         recruitHint: "*Posting takes as little as 1 minute. Free for university researchers and students.",
