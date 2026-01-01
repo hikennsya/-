@@ -242,13 +242,13 @@ function renderPolicy() {
         <h3 class="font-bold text-primary border-b pb-2 mb-3">Privacy</h3>
         <p class="text-sm text-gray-600 mb-6">Information provided at the time of application is managed by each researcher. This site is not responsible for any disputes.</p>
     `;
-    return `<div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8">${content}<a href="#" onclick="history.back(); return false;" class="text-accent hover:underline text-sm font-medium">${t.back}</a></div>`;
+    return `<div class="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8">${content}<a href="#" onclick="history.back(); return false;" class="text-accent hover:underline text-sm font-medium">${t.back}</a></div>`;
 }
 
 function renderRecruit() {
     const t = i18n[currentLang];
     return `
-    <div class="max-w-3xl mx-auto space-y-6">
+    <div class="max-w-5xl mx-auto space-y-6">
         <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg">
             <h2 class="text-2xl font-bold mb-4">${t.recruitHero}</h2>
             <p class="opacity-90 mb-6">${t.recruitSub}</p>
@@ -262,7 +262,7 @@ function renderRecruit() {
 function renderContact() {
     const t = i18n[currentLang];
     return `
-    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
         <div class="w-16 h-16 bg-blue-100 text-accent rounded-full flex items-center justify-center mx-auto mb-6"><i data-lucide="mail" class="w-8 h-8"></i></div>
         <h2 class="text-2xl font-bold text-primary mb-4">${t.contactTitle}</h2>
         <p class="text-gray-600 mb-6">${t.contactText}</p>
@@ -291,5 +291,5 @@ function renderFaq() {
             <div class="px-5 pb-5 pt-0 text-sm text-gray-600 leading-relaxed border-t border-gray-50 bg-gray-50/50"><div class="flex gap-3 pt-4"><span class="w-6 h-6 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">A</span><p>${item.a}</p></div></div>
         </details>`).join('');
 
-    return `<div class="max-w-3xl mx-auto space-y-6"><div class="text-center mb-8"><h2 class="text-2xl font-bold text-primary mb-2">${t.faq}</h2></div>${faqHtml}</div>`;
+    return `<div class="max-w-5xl mx-auto space-y-6"><div class="text-center mb-8"><h2 class="text-2xl font-bold text-primary mb-2">${t.faq}</h2></div>${faqHtml}</div>`;
 }
