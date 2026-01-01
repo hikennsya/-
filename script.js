@@ -234,6 +234,7 @@ function renderPolicy() {
     const content = currentLang === 'jp' ? `
         <h2 class="text-2xl font-bold mb-4">利用ポリシー</h2>
         <p class="text-sm text-gray-600 mb-8">このサイトは、研究目的の参加者募集を円滑に行うためのプラットフォームです。公序良俗に反する投稿や、虚偽情報の掲載は固く禁じます。</p>
+        <p class="text-sm text-gray-600">本ポリシーの内容は、必要に応じて予告なく変更される場合があります。最新の内容は本ページにてご確認ください。</p>
         <h3 class="font-bold text-primary border-b pb-2 mb-3">個人情報の取り扱い</h3>
         <p class="text-sm text-gray-600 mb-6">応募時に提供される情報は、各研究担当者が管理します。当サイトは情報の正確性やトラブルについて一切の責任を負いません。</p>
     ` : `
@@ -241,22 +242,65 @@ function renderPolicy() {
         <p class="text-sm text-gray-600 mb-8">This site is a platform for recruiting research participants. Posts that violate public order or contain false information are strictly prohibited.</p>
         <h3 class="font-bold text-primary border-b pb-2 mb-3">Privacy</h3>
         <p class="text-sm text-gray-600 mb-6">Information provided at the time of application is managed by each researcher. This site is not responsible for any disputes.</p>
+        <p class="text-sm text-gray-600">The contents of this policy are subject to change without notice. Please check this page for the latest information.</p>
     `;
     return `<div class="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8">${content}<a href="#" onclick="history.back(); return false;" class="text-accent hover:underline text-sm font-medium">${t.back}</a></div>`;
 }
 
 function renderRecruit() {
     const t = i18n[currentLang];
-    return `
-    <div class="max-w-5xl mx-auto space-y-6">
-        <div class="bg-gradient-to-r from-accent to-blue-700 rounded-2xl p-8 text-white text-center shadow-lg">
-            <h2 class="text-2xl font-bold mb-4">${t.recruitHero}</h2>
-            <p class="opacity-90 mb-6">${t.recruitSub}</p>
-            <a href="${RECRUIT_FORM_URL}" target="_blank" class="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-md hover:bg-gray-100 transition-transform hover:-translate-y-1">
-                <i data-lucide="external-link" class="w-4 h-4"></i> ${t.recruitBtn}
-            </a>
-        </div>
-    </div>`;
+    const content = currentLang === 'jp' ? `
+        <section class="space-y-4">
+            <h4 class="font-bold text-accent mb-2 text-base flex items-center gap-2">
+                <i data-lucide="package" class="w-4 h-4"></i>掲載可能な内容
+            </h4>
+            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
+                <li>実験の参加者を**無料**で募集することが可能です。</li>
+                <li>各研究室の参加者募集のリンク（Sonaシステム、ホームページなど）も掲載可能です。</li>
+            </ul>
+            <hr>
+            <h4 class="font-bold text-blue-800 mb-2 text-base flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>注意事項
+            </h4>
+            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
+                <li>掲載料金などは一切かかりません。</li>
+                <li>実験・調査内容に**虚偽を含まない**こと。</li>
+                <li>**謝礼の有無は必ず明記**してください。また謝礼がアマゾンギフト券など**現金以外の場合も明記**してください。</li>
+            </ul>
+            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
+                <p class="font-bold flex items-center gap-2 mb-1">
+                    <i data-lucide="alert-triangle" class="w-4 h-4"></i>免責事項
+                </p>
+                当サイトを通じて行われる参加者募集に関連して生じたいかなる問題についても、当サイトは一切の責任を負いません。
+            </div>
+        </section>
+    ` : `
+        <section class="space-y-4">
+            <h4 class="font-bold text-accent mb-2 text-base flex items-center gap-2">
+                <i data-lucide="package" class="w-4 h-4"></i>What you can post
+            </h4>
+            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
+                <li>You can recruit experiment participants for **free**.</li>
+                <li>Links to lab recruitment systems (Sona, websites, etc.) can also be posted.</li>
+            </ul>
+            <hr>
+            <h4 class="font-bold text-blue-800 mb-2 text-base flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>Important Notes
+            </h4>
+            <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 pl-4">
+                <li>There are no posting fees.</li>
+                <li>The experiment/survey must **not contain false information**.</li>
+                <li>**Reward details must be stated clearly**. If the reward is non-cash (e.g., Amazon gift card), please specify it.</li>
+            </ul>
+            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700 font-medium">
+                <p class="font-bold flex items-center gap-2 mb-1">
+                    <i data-lucide="alert-triangle" class="w-4 h-4"></i>Disclaimer
+                </p>
+                This site is not responsible for any issues arising from participation in any research posted here.
+            </div>
+        </section>
+    `;
+    return `<div class="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8">${content}</div>`;
 }
 
 function renderContact() {
@@ -274,12 +318,33 @@ function renderContact() {
 
 function renderFaq() {
     const t = i18n[currentLang];
+    // 言語によってFAQデータを出し分け
     const faqData = currentLang === 'jp' ? [
-        { q: "無料で掲載できますか？", a: "はい、大学関係者であれば無料で掲載可能です。" },
-        { q: "掲載を終了したい", a: "お問い合わせフォームからご連絡ください。" }
+        { 
+            q: "学生個人の実験の掲載はできますか？", 
+            a: "はい、掲載可能です。" 
+        },
+        { 
+            q: "掲載を終了するにはどうすればいいですか？", 
+            a: "募集が終了した場合は実験名の前に【募集終了】と表記してください。削除を希望される場合はお問い合わせフォームよりご連絡ください。" 
+        },
+        { 
+            q: "写真や資料を掲載することはできますか？", 
+            a: "掲示板はテキストベースです。資料がある場合は、Googleドライブの共有リンク等を詳細欄に記載することを推奨しています。" 
+        }
     ] : [
-        { q: "Is it free to post?", a: "Yes, it is free for university researchers and students." },
-        { q: "How to end recruitment?", a: "Please contact us via the contact form." }
+        { 
+            q: "Can I post an individual student's experiment?", 
+            a: "Yes, you can post it." 
+        },
+        { 
+            q: "How can I end or delete my post?", 
+            a: "Please add 【Closed】 to the title when finished. If you wish to delete it, please contact us via the contact form." 
+        },
+        { 
+            q: "Can I post photos or documents?", 
+            a: "The board is text-based. If you have additional documents, we recommend providing a link (e.g., Google Drive) in the details field." 
+        }
     ];
 
     const faqHtml = faqData.map(item => `
